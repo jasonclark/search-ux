@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Privacy Explanation for the Prototype Search App for "Improving Search UX using Query Analysis and Machine Cues"</title>
+        <meta name="description" content="Statement explaining where and how data is collected for the Search Application Prototype for Digital Library Forum 2015 presentation - Is there a Ghost in the [Search] Machine? Improving Search UX using Query Analysis and Machine Cues">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+	<!--<link rel="stylesheet" href="meta/styles/main.css" />-->
+<style>
+html {box-sizing:border-box;font-family:'Open sans',sans-serif;font-size:100%;line-height:1.7rem;}
+*, *:before, *:after {box-sizing:inherit;}
+body {color:#333;margin:0;padding:0;}
+a {font-weight:700;text-decoration:none;}
+a:link, a:visited {color:#207cca;}
+a:hover,a:focus,a:active {outline:0;text-decoration:underline;}
+h1 {font-size:1.5em;margin:0 0 1rem 0;padding:0;}
+h1 + p {margin-top:0;}
+input {border-radius:4px;outline:none;}
+::-webkit-input-placeholder {color:#333;}
+:-moz-placeholder {color:#333;}
+::-moz-placeholder {color:#333;}
+:-ms-input-placeholder {color:#333;}
+:focus::-webkit-input-placeholder {color:transparent;}
+:focus:-moz-placeholder {color:transparent;}
+:focus::-moz-placeholder {color:transparent;}
+:focus:-ms-input-placeholder {color:transparent;}
+.search {background:#eff1f3;border:1px solid #d8d8d8;padding:8px 15px;width:70%;}
+.button {background-color:#207cca;border:1px solid #207cca;color:#fafafa;/*left:-8px;*/padding:8px 15px;/*position:relative;*/}
+.button:hover {background-color:#fafafa;color:#207cca;}
+.info {display:flex;flex-direction:column;align-items:flex-end;}
+.links {display:flex;flex-direction:column;}
+/* mobile first, smaller screen styles */
+.flexbox {display:flex;flex-direction:column;}
+.fullheight {min-height:100vh;}
+.fullwidth {padding-right:0;padding-left:0;}
+.flex-search {}
+.flex-facet {background: #eff1f3;border-top: 1px solid #d8d8d8;}
+/* make direct descendents display as columns */
+.flexbox > div {width:100%;padding:10px;display:flex;flex-direction:column;flex:1;/*shorthand for flex-grow: 1;flex-shrink: 1;flex-basis: auto;*/}
+.flexbox > div:first-child {margin-right:20px;}
+/* larger screen styles (above 48em) */
+@media all and (min-width:48em) {
+	.flexbox {flex-direction:row;}
+	.flexbox > div {width:50%;}
+	.flex-facet {border-left:1px solid #d8d8d8;border-top:0 none;}
+}
+</style>
+<!--[if IE]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+<body>
+<div class="flexbox fullheight fullwidth">
+	<div class="flex-search" role="main"> 
+		<h1>Privacy - Ten Blue Links</h1>
+		<p>With this project, I am interested in preserving the privacy of users while allowing for customizations that add value to searching and browsing. In the interest of transparency, I'm listing the sources of the data that allowed for the enhancements and facets for the application</p>
+		<ul>
+			<li>Rudimentary sentiment analysis and semantic evaluation of the search query</li>
+			<li>Cues from the "machine": HTTP Headers, global server variables, and location info from the network or browser</li>
+			<li>IP and PII (personally identifiable information) anonymized search log and web analytics data</li>
+		</ul>
+		<p>I'm interested in finding the line where utility and adding value with this data cross into notions of surveillance, If you have thoughts or want to learn more, <a href="http://www.jasonclark.info">contact Jason A. Clark</a> or find me on twitter <a href="https://twitter.com/jaclark">@jaclark</a>.</p>
+	</div>
+	<div class="flex-facet" role="complementary">
+		<h1>Links</h1>
+		<p class="links"><a href="index.html">Home</a> <a href="about.html">What is this?</a></p>
+	</div>
+</div>
+</body>
+</html>

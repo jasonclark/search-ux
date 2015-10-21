@@ -29,7 +29,8 @@ input {border-radius:4px;outline:none;}
 .search {background:#eff1f3;border:1px solid #d8d8d8;padding:8px 15px;width:70%;}
 .button {background-color:#207cca;border:1px solid #207cca;color:#fafafa;/*left:-8px;*/padding:8px 15px;/*position:relative;*/}
 .button:hover {background-color:#fafafa;color:#207cca;}
-.info {display:flex;justify-content:flex-end;}
+.info {display:flex;flex-direction:column;align-items:flex-end;}
+.links {display:flex;flex-direction:column;}
 /* mobile first, smaller screen styles */
 .flexbox {display:flex;flex-direction:column;}
 .fullheight {min-height:100vh;}
@@ -58,8 +59,6 @@ input {border-radius:4px;outline:none;}
 			<input class="search" type="text" placeholder="Search..." required />
 			<input class="button" type="button" value="Search" />
 		</form>
-		<p>Etc etc etc</p>
-		<p class="info"><a href="about.html">What is this?</a></p>
 	</div>
 	<div class="flex-facet" role="complementary">
 		<h1>Facets</h1>
@@ -80,7 +79,7 @@ input {border-radius:4px;outline:none;}
                 <summary>Offers</summary>
                         <p>It's raining and cold, stop in for a cuppa... </p>
                 </details>
-                <p class="info"><a href="privacy.html">Privacy?</a></p>
+                <p class="info"><a href="privacy.html">Privacy?</a> <a href="about.html">What is this?</a></p>
 	</div>
 </div>
 </body>

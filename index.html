@@ -103,12 +103,12 @@ input {border-radius:4px;outline:none;}
 		echo '<!--' . $url . '-->';
 
 		// Build request and send to Google Ajax Search API
-    	$request = file_get_contents($url);
+		$request = file_get_contents($url);
 
     	if ($request === FALSE) {
-			// API call failed, display message to user
-			echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
-			exit();
+		// API call failed, display message to user
+		echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
+		exit();
     	}
 
     	// Decode json object(s) out of response from Google Ajax Search API
@@ -126,15 +126,15 @@ input {border-radius:4px;outline:none;}
 ?>
 	<h2 class="result">Search for <strong><?php echo urldecode($q); ?></strong> (About <?php echo $totalItems; ?> results)</h2>
 		<div class="result-facet">
-			<p class="facet-filter facet"><span class="facet-heading">Filter</span>
-			<a class="facet-link facet" href="./index.php?q=<?php echo urlencode($_GET['q']); ?>">All</a>
+			<p class="facet-filter facet"><span class="facet-heading">Filter:</span>
+			<a class="facet-link facet" href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">All</a>
 <?php
 			foreach ($result['context']['facets'] as $key) {
-				echo "<a class=\"facet-link facet\" href=\"./index.php?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a> ";
+				echo "<a class=\"facet-link facet\" href=\"./index.html?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a> ";
 			 }
 ?>
 			</p>
-			<p class="facet-filter facet"><span class="facet-heading">Sort</span><a class="facet-link facet" href="./index.php?q=<?php echo urlencode($_GET['q']); ?>">Relevance</a> <a class="facet-link facet" href="./index.php?sort=date&amp;q=<?php echo urlencode($_GET['q']); ?>">Date</a>
+			<p class="facet-filter facet"><span class="facet-heading">Sort:</span> <a class="facet-link facet" href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">Relevance</a> <a class="facet-link facet" href="./index.html?sort=date&amp;q=<?php echo urlencode($_GET['q']); ?>">Date</a>
 			</p>
 			<p class="facet-filter facet popular"><span class="facet-heading">Popular Searches</span>
 			<?php

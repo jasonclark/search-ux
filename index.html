@@ -135,7 +135,15 @@ input {border-radius:4px;outline:none;}
 	} else {
 		// Make sure some results were returned, show results as html with result numbering and pagination
 ?>
-	<p class="sort"><span class="sort-heading">Sort:</span> <a href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">Relevance</a> <a href="./index.html?sort=date&amp;q=<?php echo urlencode($_GET['q']); ?>">Date</a></p>
+	<p class="sort">
+	<span class="sort-heading">Sort:</span> 
+	<a href="./index.html?q=<?php echo urlencode($q); ?>">Relevance</a> or <a href="./index.html?sort=date&amp;q=<?php echo urlencode($q); ?>">Date</a>
+<?php if (!is_null($facet)) { 
+?>
+	 | <span class="sort-heading">Category: 
+	<a href="./index.html?q=<?php echo urlencode($q); ?>&amp;facet=<?php echo urlencode($facet); ?>"><?php echo urldecode(ucfirst($facet)); ?></a>
+<?php }//end check for facet ?> 
+	</p>
 	<p class="result"><strong><?php echo '"'.urldecode($q).'"'; ?></strong> (About <?php echo $totalItems; ?> results)</p>
 		<ul class="result">
 <?php
@@ -190,10 +198,25 @@ input {border-radius:4px;outline:none;}
 	</div>
 	<div class="flex-facet" role="complementary">
 		<h1>Facets</h1>
-		<p>Not seeing what you need? Watch this space for refinements.
+		<p>Not seeing what you need? Watch the space below for refinements.
 <?php
 	if (!is_null($q)) {
         // Process query
+
+$cueWords = array( "about", "above", "across", "after", "afterwards", "again", "against", "all", "almost", "alone", "became", "because", "become", "becomes", "becoming", "been", "before", "beforehand", "behind", "being", "below", "beside", "besides", "between", "beyond", "by", "call", "can", "cannot", "cant", "could", "couldnt", "cry", "describe", "do", "either", "except", "few", "fill", "find", "found", "from", "front", "full", "further", "get", "give", "go", "had", "has", "hasnt", "have", "how", "however", "hundred", "if", "in", "indeed", "interest", "into", "is", "keep", "might", "mine", "more", "moreover", "most", "mostly", "move", "much", "must", "my", "myself", "name", "never", "nevertheless", "nor", "not", "nothing", "now", "nowhere", "of", "off", "often", "on", "once", "one", "only", "onto", "or", "other", "others", "otherwise", "our", "ours", "ourselves", "out", "over", "own", "part", "per", "perhaps", "please", "put", "rather", "see", "seem", "seemed", "seeming", "seems", "should", "show", "side", "since", "so", "some", "somehow", "someone", "something", "sometime", "sometimes", "somewhere", "still", "such", "system", "take", “temp”, “temperature”, "than", "that", "the", "their", "them", "themselves", "then", "thence", "there", "thereafter", "thereby", "therefore", "therein", "thereupon", "these", "they", "this", "those", "though", "three", "through", "throughout", "thru", "thus", "to", "together", "too", "top", "toward", "towards", "under", "until", "up", "upon", "us", "very", "time", "were", “weather”, "what", "whatever", "when", "whence", "whenever", "where", "whereafter", "whereas", "whereby", "wherein", "whereupon", "wherever", "whether", "which", "while", "whither", "who", "whoever", "whole", "whom", "whose", "why", "will", "with", "within", "without", "would", "yet", "you", "your", "yours", "yourself", "yourselves");
+//check for natural language question words
+if (in_array(strtolower($q), $cueWords)) {
+
+echo $q;
+
+?>
+                <details>
+                <summary>It looks like you are asking a question.</summary>
+                        <p>Do you want to talk to a person?</p>
+			<p><a href="http://ask.lib.montana.edu/ask">Talk to a Librarian</a> OR <a href="http://ask.lib.montana.edu/">Check our FAQ</a></p>
+                </details>
+<?php
+}//end check for natural language question words
 
         // Set URL for the Google Custom Search API call
         $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(is_null($sort) ? "" : "&sort=$sort")."&num=$limit&start=$start&prettyprint=true&q=$q".(is_null($facet) ? "" : "&hq=$facet");
@@ -230,7 +253,7 @@ input {border-radius:4px;outline:none;}
 <?php
 
 		foreach ($getFacets['context']['facets'] as $key) {
-			echo "<a href=\"./index.html?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a>";
+			echo " <a href=\"./index.html?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a> ";
 		}
 ?>
 		</p>
@@ -251,15 +274,11 @@ input {border-radius:4px;outline:none;}
 <?php
                         }
 ?>
-                           </details>
-<?php
-                } // End else -- $totalItems <= 0
-        } // End (!is_null($q))
-?>
-		<details>
-  		<summary>Location</summary>
-  			<p>Subjects by location</p>
 		</details>
+                <details>
+                <summary>Location</summary>
+                        <p>Subjects by location</p>
+                </details>
                 <details>
                 <summary>People</summary>
                         <p>Suggested people...</p>
@@ -272,6 +291,11 @@ input {border-radius:4px;outline:none;}
                 <summary>Offers</summary>
                         <p>It's raining and cold, stop in for a cuppa... </p>
                 </details>
+<?php
+                } // End else -- $totalItems <= 0
+        } // End (!is_null($q))
+?>
+		<p>With this prototype, I'm looking at ways that the search act can be treated as a conversation.</p>
                 <p class="info"><a href="privacy.html">Privacy?</a> <a href="about.html">What is this?</a></p>
 	</div>
 </div>

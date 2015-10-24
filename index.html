@@ -17,6 +17,10 @@ a:link, a:visited {color:#207cca;}
 a:hover,a:focus,a:active {outline:0;text-decoration:underline;}
 h1 {font-size:1.5em;margin:0 0 1rem 0;padding:0;}
 h1 + p {margin-top:0;}
+ul {list-style:none;margin:0;padding-left:0;}
+ul > :first-child {margin-top:0;}
+ul > :last-child {margin-bottom:0;}
+li {margin:1rem 0;}
 input {border-radius:4px;outline:none;}
 ::-webkit-input-placeholder {color:#333;}
 :-moz-placeholder {color:#333;}
@@ -31,14 +35,22 @@ input {border-radius:4px;outline:none;}
 .button:hover {background-color:#fafafa;color:#207cca;}
 .info {display:flex;flex-direction:column;align-items:flex-end;}
 .links {display:flex;flex-direction:column;}
+.pages {margin:.625em 0 0 0;padding:0;}
+.pages li {display:inline;margin:0 1rem;}
+.pages > :first-child {margin-left:0;}
+.pages > :last-child {margin-right:0;}
+.previous,.next {padding:.25rem .5rem;border:1px solid #207cca;border-radius:.25rem;font-size:.8em;}
+.previous:before {content: "\000AB\ ";}
+.next:after {content:" \000BB\ ";}
+.sort {margin:0;font-size:.8125rem;}
 /* mobile first, smaller screen styles */
 .flexbox {display:flex;flex-direction:column;}
 .fullheight {min-height:100vh;}
 .fullwidth {padding-right:0;padding-left:0;}
 .flex-search {}
-.flex-facet {background: #eff1f3;border-top: 1px solid #d8d8d8;}
+.flex-facet {background: #eff1f3;border-top:1px solid #d8d8d8;}
 /* make direct descendents display as columns */
-.flexbox > div {width:100%;padding:10px;display:flex;flex-direction:column;flex:1;/*shorthand for flex-grow: 1;flex-shrink: 1;flex-basis: auto;*/}
+.flexbox > div {width:100%;padding:1.5rem;display:flex;flex-direction:column;flex:1;/*shorthand for flex-grow: 1;flex-shrink: 1;flex-basis: auto;*/}
 .flexbox > div:first-child {margin-right:20px;}
 /* larger screen styles (above 48em) */
 @media all and (min-width:48em) {
@@ -88,22 +100,22 @@ input {border-radius:4px;outline:none;}
 
 ?>
                 <form role="search" method="get" action="index.html">
-                        <input class="search" type="text" name="q" id="q" tabindex="1" placeholder="Search..." value="" required />
+                        <input class="search" type="text" name="q" id="q" tabindex="1" placeholder="Search..." value="<?php if (!is_null($q)) { echo urldecode($q); } ?>" required />
                         <input class="button" type="submit" value="Search" />
                 </form>
 
 <?php
 	if (!is_null($q)) {
-		// Process query
+	// Process query
 
-		// Set URL for the Google Custom Search API call
-		$url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(is_null($sort) ? "" : "&sort=$sort")."&num=$limit&start=$start&prettyprint=true&q=$q".(is_null($facet) ? "" : "&hq=$facet");
+	// Set URL for the Google Custom Search API call
+	$url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(is_null($sort) ? "" : "&sort=$sort")."&num=$limit&start=$start&prettyprint=true&q=$q".(is_null($facet) ? "" : "&hq=$facet");
 
-		// View source to see raw API call - REMOVE from production code
-		echo '<!--' . $url . '-->';
+	// View source to see raw API call - REMOVE from production code
+	echo '<!--' . $url . '-->';
 
-		// Build request and send to Google Ajax Search API
-		$request = file_get_contents($url);
+	// Build request and send to Google Ajax Search API
+	$request = file_get_contents($url);
 
     	if ($request === FALSE) {
 		// API call failed, display message to user
@@ -112,64 +124,30 @@ input {border-radius:4px;outline:none;}
     	}
 
     	// Decode json object(s) out of response from Google Ajax Search API
-		$result = json_decode($request, true);
+	$result = json_decode($request, true);
 
     	// Get values in json data for number of search results returned
-		$totalItems = isset($_GET['totalItems']) ?  strip_tags((int)$_GET['totalItems']) : $result['queries']['request'][0]['totalResults'];
+	$totalItems = isset($_GET['totalItems']) ?  strip_tags((int)$_GET['totalItems']) : $result['queries']['request'][0]['totalResults'];
 
-		if ($totalItems <= 0) {
-			// Empty results, display message to user
-			echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
-		}
-		else {
-			// Make sure some results were returned, show results as html with result numbering and pagination
+	if ($totalItems <= 0) {
+	// Empty results, display message to user
+		echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
+	} else {
+		// Make sure some results were returned, show results as html with result numbering and pagination
 ?>
-	<h2 class="result">Search for <strong><?php echo urldecode($q); ?></strong> (About <?php echo $totalItems; ?> results)</h2>
-		<div class="result-facet">
-			<p class="facet-filter facet"><span class="facet-heading">Filter:</span>
-			<a class="facet-link facet" href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">All</a>
-<?php
-			foreach ($result['context']['facets'] as $key) {
-				echo "<a class=\"facet-link facet\" href=\"./index.html?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a> ";
-			 }
-?>
-			</p>
-			<p class="facet-filter facet"><span class="facet-heading">Sort:</span> <a class="facet-link facet" href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">Relevance</a> <a class="facet-link facet" href="./index.html?sort=date&amp;q=<?php echo urlencode($_GET['q']); ?>">Date</a>
-			</p>
-			<p class="facet-filter facet popular"><span class="facet-heading">Popular Searches</span>
-			<?php
-			// Set most popular search terms RDF URL
-			$request = 'http://www.google.com/cse/api/010001021870615082419/cse/sgtwcccfbiq/queries?key='.$key.'&view=overall';
-			// Read feed into SimpleXML object
-			$getPopular = simplexml_load_file($request, 'SimpleXMLIterator');
-			// Set limit of 5 terms to display
-			$entries = new LimitIterator($getPopular->item, 0, 5);
-			foreach ($entries as $entry) {
-				$popularTerm = htmlentities($entry->title);
-?>
-			<a class="facet-link facet" href="./index.php?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a>
-<?php
-			}
-?>
-		</div>
+	<p class="sort"><span class="sort-heading">Sort:</span> <a href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">Relevance</a> <a href="./index.html?sort=date&amp;q=<?php echo urlencode($_GET['q']); ?>">Date</a></p>
+	<p class="result"><strong><?php echo '"'.urldecode($q).'"'; ?></strong> (About <?php echo $totalItems; ?> results)</p>
 		<ul class="result">
 <?php
 			foreach ($result['items'] as $item) {
 				$link = rawurldecode($item['link']);
 ?>
 			<li>
-			<p class="result-description">
 			<a href="<?php echo $link; ?>"><?php echo $item['htmlTitle']; ?></a>
 			<br />
 			<?php echo $item['htmlFormattedUrl']; ?>
-			<br />
-			<?php echo $item['htmlSnippet']; ?>
-			<br />
+			<?php //echo $item['htmlSnippet']; ?>
 			<?php //echo 'id: '.$sr['cacheId']; ?>
-			<a class="expand" href="<?php echo $link; ?>">more</a>
-			<br />
-			<br />
-			</p>
 			</li>
 <?php
 			}
@@ -191,13 +169,13 @@ input {border-radius:4px;outline:none;}
 <?php
 			if (!is_null($previous)) {
 ?>
-			<li><a href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $previous; ?>">Previous</a></li>
+			<li><a class="previous" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $previous; ?>">Previous</a></li>
 
 <?php
 			}
 			if (!is_null($next)) {
 ?>
-			<li><a  href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $next; ?>">Next</a></li>
+			<li><a class="next" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $next; ?>">Next</a></li>
 <?php
 			}
 ?>
@@ -205,14 +183,79 @@ input {border-radius:4px;outline:none;}
 <?php
 			}
 		} // End else -- $totalItems <= 0
-	} // End (!is_null($q))
+        } // End (!is_null($q))
 ?>
 
 
 	</div>
 	<div class="flex-facet" role="complementary">
 		<h1>Facets</h1>
-		<p>Not seeing what you need? Check out these refinements.
+		<p>Not seeing what you need? Watch this space for refinements.
+<?php
+	if (!is_null($q)) {
+        // Process query
+
+        // Set URL for the Google Custom Search API call
+        $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(is_null($sort) ? "" : "&sort=$sort")."&num=$limit&start=$start&prettyprint=true&q=$q".(is_null($facet) ? "" : "&hq=$facet");
+
+        // View source to see raw API call - REMOVE from production code
+        echo '<!--' . $url . '-->';
+
+        // Build request and send to Google Ajax Search API
+        $request = file_get_contents($url);
+
+        if ($request === FALSE) {
+                // API call failed, display message to user
+                echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
+                exit();
+        }
+
+        // Decode json object(s) out of response from Google Ajax Search API
+        $getFacets = json_decode($request, true);
+
+        // Get values in json data for number of search results returned
+        $totalItems = isset($_GET['totalItems']) ?  strip_tags((int)$_GET['totalItems']) : $result['queries']['request'][0]['totalResults'];
+
+        if ($totalItems <= 0) { 
+        // Empty results, display message to user
+                echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
+        } else {
+                // Make sure some results were returned, show results as html with result numbering and pagination
+
+?>
+		<details>
+                <summary>Categories</summary>
+		<p>
+		<a href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">All</a>
+<?php
+
+		foreach ($getFacets['context']['facets'] as $key) {
+			echo "<a href=\"./index.html?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a>";
+		}
+?>
+		</p>
+		</details>
+                <details>
+                <summary>Popular</summary>
+                        <?php
+                        // Set most popular search terms RDF URL
+                        $request = 'http://www.google.com/cse/api/010001021870615082419/cse/sgtwcccfbiq/queries?key='.$key.'&view=overall';
+                        // Read feed into SimpleXML object
+                        $getPopular = simplexml_load_file($request, 'SimpleXMLIterator');
+                        // Set limit of 5 terms to display
+                        $entries = new LimitIterator($getPopular->item, 0, 5);
+                        foreach ($entries as $entry) {
+                                $popularTerm = htmlentities($entry->title);
+?>
+                        <p><a href="./index.php?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a></p>
+<?php
+                        }
+?>
+                           </details>
+<?php
+                } // End else -- $totalItems <= 0
+        } // End (!is_null($q))
+?>
 		<details>
   		<summary>Location</summary>
   			<p>Subjects by location</p>

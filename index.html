@@ -320,7 +320,7 @@ echo $q;
                         var cleanTerm = data.Placemark[i].name.replace(/ -- /g, " ");
                         markup += '<a title="' + data.Placemark[i].name + '" href="' + url + cleanTerm + '">' + data.Placemark[i].name + '</a>';
                 }       
-                container.innerHTML = markup + '</span>';
+                container.innerHTML = markup + '</span> ';
         }               
         </script>
                 </details>
@@ -332,7 +332,7 @@ echo $q;
                 <summary>FAQ</summary>
                         <p>It looks like you have a question. We have a list of common library questions in <a href="http://ask.lib.montana.edu/">our FAQ</a> or we can <a href="http://ask.lib.montana.edu/search/?q=<?php echo $q; ?>">run your search in our knowledgebase</a>.</p>
                 </details>
-                <details>
+                <details id="offer">
                 <summary>Offers</summary>
 <?php
 //forecast.io api docs at https://developer.forecast.io/docs/v2
@@ -340,9 +340,9 @@ echo $q;
 //ADD YOUR_FORECAST.IO_API_KEY_HERE
 $key = 'ADD-YOUR-FORECAST.IO-API-KEY-HERE';
 //set default value for latitude to youtube API
-$lat = isset($_REQUEST['lat']) ? strip_tags(floatval($_REQUEST['lat'])) : '45.68346';
+$lat = isset($_REQUEST['lat']) ? strip_tags(floatval($_REQUEST['lat'])) : '49.246292';
 //set default value for latitude to youtube API
-$lng = isset($_REQUEST['lng']) ? strip_tags(floatval($_REQUEST['lng'])) : '-111.050499';
+$lng = isset($_REQUEST['lng']) ? strip_tags(floatval($_REQUEST['lng'])) : '-123.116226';
 
 //set base url for our opensearch request to youtube.com data API
 $apiURL = 'https://api.forecast.io/forecast/'.$key.'/'.$lat.','.$lng.'?exclude=minutely,hourly';
@@ -382,7 +382,7 @@ $cloudCover = $result->currently->cloudCover;
 ?>
         <dt>Current Conditions:</dt>
         <!--<dd><figure><canvas id="<?php //echo $icon; ?>" width="64" height="64"></canvas></figure></dd>-->
-  <dd>summary: <?php echo $summary; ?></dd>
+	<dd>summary: <?php echo $summary; ?></dd>
         <dd>icon shorthand: <?php echo $icon; ?></dd>
         <dd>temperature: <?php echo $temperature; ?></dd>
         <dd>wind: <?php echo $wind; ?></dd>
@@ -390,40 +390,22 @@ $cloudCover = $result->currently->cloudCover;
         <dd>chance of precip: <?php echo $precipProbability; ?></dd>
         <dd>cloud cover: <?php echo $cloudCover; ?></dd>
 <?php
-//parse returned data elements from api call and display as html
-$summary = $result->daily->summary;
-$icon = $result->daily->icon;
-$daySummary = $result->daily->data[0]->summary;
-$dayIcon = $result->daily->data[0]->icon;
-$highTemperature = $result->daily->data[0]->temperatureMax;
-$lowTemperature = $result->daily->data[0]->temperatureMin;
-$wind = $result->daily->data[0]->windSpeed;
-$pressure = $result->daily->data[0]->pressure;
-$precipProbability = $result->daily->data[0]->precipProbability;
-$cloudCover = $result->daily->data[0]->cloudCover;
+if ($cloudCover > .3) {
 ?>
-        <dt>Tomorrow Conditions:</dt>
-        <!--<dd><figure><canvas id="<?php echo $dayIcon; ?>" width="64" height="64"></canvas></figure></dd>-->
-  <dd>tomorrow summary: <?php echo $daySummary; ?></dd>
-  <dd>icon shorthand: <?php echo $dayIcon; ?></dd>
-        <dd>high temperature: <?php echo $highTemperature; ?></dd>
-        <dd>low temperature: <?php echo $lowTemperature; ?></dd>
-        <dd>wind: <?php echo $wind; ?></dd>
-        <dd>pressure: <?php echo $pressure; ?></dd>
-        <dd>chance of precip: <?php echo $precipProbability; ?></dd>
-        <dd>cloud cover: <?php echo $cloudCover; ?></dd>
-        <dt>Weekly Conditions:</dt>
-        <!--<dd><figure><canvas id="<?php //echo $icon; ?>" width="64" height="64"></canvas></figure></dd>-->
-  <dd>summary: <?php echo $summary; ?></dd>
+	<p>It's cloudy and cold, stop in for a cup of something warm. Check out the <a href="http://www.montana.edu/ufs/menus/brewed_awakening.php">"Brewed Awakening" hours and menu.</a></p>
 <?php
+} else {
+?>
+	<p>Here comes the sun, stop in for a cup of something cool. Check out the <a href="http://www.montana.edu/ufs/menus/brewed_awakening.php">"Brewed Awakening" hours and menu.</a></p>
+<?php
+}
 else: //show no results message
 ?>
-<p class="subHeading">No forecsast.io results for <strong><?php urldecode($q); ?></strong>.</p>
+<p class="subHeading">No forecast.io results for <strong><?php urldecode($q); ?></strong>.</p>
 <p class="control"><a href="<?php echo htmlentities(strip_tags(basename(__FILE__))); ?>" class="refresh">Reset the page</a></p>
 <?php
 endif;
 ?>
-<p>It's raining and cold, stop in for a cuppa... </p>
                 </details>
 <?php
                 } // End else -- $totalItems <= 0

@@ -93,10 +93,10 @@ input {border-radius:4px;outline:none;}
 	$v = isset($_GET['v']) ? strip_tags((int)$_GET['v']) : 'v1';
 
 	// Set user API key for Google Custom Search API
-	$key = isset($_GET['key']) ? $_GET['key'] : 'AIzaSyDD_m3LerirQ6iTJIoyMaxiQoiRBqKEjd0';
+	$key = isset($_GET['key']) ? $_GET['key'] : 'ADD-YOUR-GOOGLE-CUSTOM-SEARCH-API-KEY-HERE';
 
 	// Set user ID for Google custom search engine
-	$id = isset($_GET['id']) ? $_GET['id'] : '010001021870615082419:c11y2dyi94c';
+	$id = isset($_GET['id']) ? $_GET['id'] : 'ADD-YOUR-GOOGLE-CUSTOM-SEARCH-ENGINE-ID-HERE';
 
 ?>
                 <form role="search" method="get" action="index.html">
@@ -260,7 +260,8 @@ echo $q;
 		</details>
                 <details>
                 <summary>Popular</summary>
-                        <?php
+			<p>
+<?php
                         // Set most popular search terms RDF URL
                         $request = 'http://www.google.com/cse/api/010001021870615082419/cse/sgtwcccfbiq/queries?key='.$key.'&view=overall';
                         // Read feed into SimpleXML object
@@ -270,26 +271,159 @@ echo $q;
                         foreach ($entries as $entry) {
                                 $popularTerm = htmlentities($entry->title);
 ?>
-                        <p><a href="./index.php?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a></p>
+                        <a href="./index.php?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a>
 <?php
                         }
 ?>
+			</p>
 		</details>
                 <details>
-                <summary>Location</summary>
-                        <p>Subjects by location</p>
+                <summary>Topics by Location</summary>
+			<p id="message" style="display:none"><img src="./meta/img/loading.gif" id="loading" /> Waiting for Godot...</p>
+			<p id="terms" class="terms"> </p>
+        <script id="worker" type="text/javascript">
+        var msg = document.getElementById("message");
+	if (navigator.geolocation) {
+                //show loading message
+                msg.style.display = 'block';
+                navigator.geolocation.getCurrentPosition(addScript);
+                console.log('geolocation done');
+        } else {
+                //error with geolocation
+                alert('Error: Your browser doesn\'t support geolocation.');
+        }
+
+        function addScript(position) {
+                //set latitude and longitude values
+                var lat = parseFloat(position.coords.latitude);
+                var lon = parseFloat(position.coords.longitude);
+                var jsonp = document.createElement('script');
+                jsonp.type = 'text/javascript';
+                jsonp.async = true;
+                jsonp.src = "https://experimental.worldcat.org/mapfast/services?geo=" + lat + "," + lon + ";crs=wgs84&radius=100000&mq=&sortby=distance&max-results=30&callback=showSubjects";
+                //document.querySelector('.terms').appendChild(script);
+                var script = document.getElementsByTagName('script')[0];
+                script.parentNode.insertBefore(jsonp, script);        
+	}
+
+        function showSubjects(data) {
+                //hide loading message
+                msg.style.display = 'none';
+                var container = document.getElementById("terms");
+                var markup = '<span>';
+                //var url = "http://www.worldcat.org/search?q=su:" + term + "&qt=advanced";
+                var url = "./index.html?&q=";
+                var i = -1;
+                var length = data.Placemark.length;
+                while (++i < length) {          
+                //for (var i = 0; i < length; i++) {
+                        var cleanTerm = data.Placemark[i].name.replace(/ -- /g, " ");
+                        markup += '<a title="' + data.Placemark[i].name + '" href="' + url + cleanTerm + '">' + data.Placemark[i].name + '</a>';
+                }       
+                container.innerHTML = markup + '</span>';
+        }               
+        </script>
                 </details>
                 <details>
                 <summary>People</summary>
-                        <p>Suggested people...</p>
+                        <p>Are you looking for a person or wanting to chat about research? See our <a href="http://www.lib.montana.edu/services/liaisons-by-department.html">research liasions</a> or <a href="http://www.lib.montana.edu/people/expertise.php">people by subject expertise</a>.</p>
                 </details>
                 <details>
                 <summary>FAQ</summary>
-                        <p>Common questions</p>
+                        <p>It looks like you have a question. We have a list of common library questions in <a href="http://ask.lib.montana.edu/">our FAQ</a> or we can <a href="http://ask.lib.montana.edu/search/?q=<?php echo $q; ?>">run your search in our knowledgebase</a>.</p>
                 </details>
                 <details>
                 <summary>Offers</summary>
-                        <p>It's raining and cold, stop in for a cuppa... </p>
+<?php
+//forecast.io api docs at https://developer.forecast.io/docs/v2
+
+//ADD YOUR_FORECAST.IO_API_KEY_HERE
+$key = 'ADD-YOUR-FORECAST.IO-API-KEY-HERE';
+//set default value for latitude to youtube API
+$lat = isset($_REQUEST['lat']) ? strip_tags(floatval($_REQUEST['lat'])) : '45.68346';
+//set default value for latitude to youtube API
+$lng = isset($_REQUEST['lng']) ? strip_tags(floatval($_REQUEST['lng'])) : '-111.050499';
+
+//set base url for our opensearch request to youtube.com data API
+$apiURL = 'https://api.forecast.io/forecast/'.$key.'/'.$lat.','.$lng.'?exclude=minutely,hourly';
+
+//for testing purposes show actual request to API - REMOVE when finished
+//echo $apiURL;
+
+//call API and get data
+$request = file_get_contents($apiURL);
+
+if ($request === FALSE) {
+        //API call failed, display message to user
+        echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
+        exit();
+}
+
+//create json object(s) out of response from API; set to "true" to turn response into an array
+//$result = json_decode($request,true);
+$result = json_decode($request);
+
+if (strlen($result->latitude) > 2):
+?>
+<a name="weather"></a>
+<p>Current Weather</p>
+<dl>
+<?php
+//dependency on skycons.js to make animated weather icons appear - https://github.com/darkskyapp/skycons
+
+//parse returned data elements from api call and display as html
+$summary = $result->currently->summary;
+$icon = $result->currently->icon;
+$temperature = $result->currently->temperature;
+$wind = $result->currently->windSpeed;
+$pressure = $result->currently->pressure;
+$precipProbability = $result->currently->precipProbability;
+$cloudCover = $result->currently->cloudCover;
+?>
+        <dt>Current Conditions:</dt>
+        <!--<dd><figure><canvas id="<?php //echo $icon; ?>" width="64" height="64"></canvas></figure></dd>-->
+  <dd>summary: <?php echo $summary; ?></dd>
+        <dd>icon shorthand: <?php echo $icon; ?></dd>
+        <dd>temperature: <?php echo $temperature; ?></dd>
+        <dd>wind: <?php echo $wind; ?></dd>
+        <dd>pressure: <?php echo $pressure; ?></dd>
+        <dd>chance of precip: <?php echo $precipProbability; ?></dd>
+        <dd>cloud cover: <?php echo $cloudCover; ?></dd>
+<?php
+//parse returned data elements from api call and display as html
+$summary = $result->daily->summary;
+$icon = $result->daily->icon;
+$daySummary = $result->daily->data[0]->summary;
+$dayIcon = $result->daily->data[0]->icon;
+$highTemperature = $result->daily->data[0]->temperatureMax;
+$lowTemperature = $result->daily->data[0]->temperatureMin;
+$wind = $result->daily->data[0]->windSpeed;
+$pressure = $result->daily->data[0]->pressure;
+$precipProbability = $result->daily->data[0]->precipProbability;
+$cloudCover = $result->daily->data[0]->cloudCover;
+?>
+        <dt>Tomorrow Conditions:</dt>
+        <!--<dd><figure><canvas id="<?php echo $dayIcon; ?>" width="64" height="64"></canvas></figure></dd>-->
+  <dd>tomorrow summary: <?php echo $daySummary; ?></dd>
+  <dd>icon shorthand: <?php echo $dayIcon; ?></dd>
+        <dd>high temperature: <?php echo $highTemperature; ?></dd>
+        <dd>low temperature: <?php echo $lowTemperature; ?></dd>
+        <dd>wind: <?php echo $wind; ?></dd>
+        <dd>pressure: <?php echo $pressure; ?></dd>
+        <dd>chance of precip: <?php echo $precipProbability; ?></dd>
+        <dd>cloud cover: <?php echo $cloudCover; ?></dd>
+        <dt>Weekly Conditions:</dt>
+        <!--<dd><figure><canvas id="<?php //echo $icon; ?>" width="64" height="64"></canvas></figure></dd>-->
+  <dd>summary: <?php echo $summary; ?></dd>
+<?php
+else: //show no results message
+?>
+<p class="subHeading">No forecsast.io results for <strong><?php urldecode($q); ?></strong>.</p>
+<p class="control"><a href="<?php echo htmlentities(strip_tags(basename(__FILE__))); ?>" class="refresh">Reset the page</a></p>
+<?php
+endif;
+?>
+<p>It's raining and cold, stop in for a cuppa... </p>
                 </details>
 <?php
                 } // End else -- $totalItems <= 0

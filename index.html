@@ -43,6 +43,8 @@ input {border-radius:4px;outline:none;}
 .previous:before {content: "\000AB\ ";}
 .next:after {content:" \000BB\ ";}
 .sort {margin:0;font-size:.8125rem;}
+.terms a:after { content: ", "; }
+.terms a:last-child:after { content: ""; }
 /* mobile first, smaller screen styles */
 .flexbox {display:flex;flex-direction:column;}
 .fullheight {min-height:100vh;}
@@ -93,10 +95,10 @@ input {border-radius:4px;outline:none;}
 	$v = isset($_GET['v']) ? strip_tags((int)$_GET['v']) : 'v1';
 
 	// Set user API key for Google Custom Search API
-	$key = isset($_GET['key']) ? $_GET['key'] : 'ADD-YOUR-GOOGLE-CUSTOM-SEARCH-API-KEY-HERE';
+	$key = isset($_GET['key']) ? $_GET['key'] : 'AIzaSyDD_m3LerirQ6iTJIoyMaxiQoiRBqKEjd0';
 
 	// Set user ID for Google custom search engine
-	$id = isset($_GET['id']) ? $_GET['id'] : 'ADD-YOUR-GOOGLE-CUSTOM-SEARCH-ENGINE-ID-HERE';
+	$id = isset($_GET['id']) ? $_GET['id'] : '010001021870615082419:c11y2dyi94c';
 
 ?>
                 <form role="search" method="get" action="index.html">
@@ -193,8 +195,6 @@ input {border-radius:4px;outline:none;}
 		} // End else -- $totalItems <= 0
         } // End (!is_null($q))
 ?>
-
-
 	</div>
 	<div class="flex-facet" role="complementary">
 		<h1>Facets</h1>
@@ -248,7 +248,7 @@ echo $q;
 ?>
 		<details>
                 <summary>Categories</summary>
-		<p>
+		<p class="terms">
 		<a href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">All</a>
 <?php
 
@@ -258,32 +258,22 @@ echo $q;
 ?>
 		</p>
 		</details>
-                <details>
-                <summary>Popular</summary>
-			<p>
 <?php
-                        // Set most popular search terms RDF URL
-                        $request = 'http://www.google.com/cse/api/010001021870615082419/cse/sgtwcccfbiq/queries?key='.$key.'&view=overall';
-                        // Read feed into SimpleXML object
-                        $getPopular = simplexml_load_file($request, 'SimpleXMLIterator');
-                        // Set limit of 5 terms to display
-                        $entries = new LimitIterator($getPopular->item, 0, 5);
-                        foreach ($entries as $entry) {
-                                $popularTerm = htmlentities($entry->title);
+	if ($totalItems > 30) { 
 ?>
-                        <a href="./index.php?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a>
-<?php
-                        }
-?>
-			</p>
+		<details>
+		<summary>"Hand-picked" Topics</summary>
+		<p>A few common topics based on our <a href="http://www.lib.montana.edu/sitemap.html">human-created sitemap</a> and an analysis of our search logs.</p>
+		<p class="terms"><a href="index.html?q=articles+research+databases">articles & research databases</a> <a href="index.html?q=borrow">borrow</a> <a href="index.html?q=research+help">research help</a> <a href="index.html?q=library+hours">library hours</a> <a href="index.html?q=yellowstone">yellowstone</a> <a href="index.html?q=parking+directions">parking &amp; directions</a> <a href="index.html?q=montana+history">montana history</a> <a href="index.html?q=google+scholar+msu">google scholar msu</a> <a href="index.html?q=montana+code+annotated">montana code annotated</a> <a href="index.html?q=mla+format">mla format 6th edition</a></p>
+                </details>
 		</details>
-                <details>
+		<details>
                 <summary>Topics by Location</summary>
-			<p id="message" style="display:none"><img src="./meta/img/loading.gif" id="loading" /> Waiting for Godot...</p>
-			<p id="terms" class="terms"> </p>
+                        <p id="message" style="display:none"><img src="./meta/img/loading.gif" id="loading" /> Waiting for Godot...</p>
+                        <p id="terms" class="terms"> </p>
         <script id="worker" type="text/javascript">
         var msg = document.getElementById("message");
-	if (navigator.geolocation) {
+        if (navigator.geolocation) {
                 //show loading message
                 msg.style.display = 'block';
                 navigator.geolocation.getCurrentPosition(addScript);
@@ -300,11 +290,11 @@ echo $q;
                 var jsonp = document.createElement('script');
                 jsonp.type = 'text/javascript';
                 jsonp.async = true;
-                jsonp.src = "https://experimental.worldcat.org/mapfast/services?geo=" + lat + "," + lon + ";crs=wgs84&radius=100000&mq=&sortby=distance&max-results=30&callback=showSubjects";
+                jsonp.src = "https://experimental.worldcat.org/mapfast/services?geo=" + lat + "," + lon + ";crs=wgs84&radius=100000&mq=&sortby=distance&max-results=15&callback=showSubjects";
                 //document.querySelector('.terms').appendChild(script);
                 var script = document.getElementsByTagName('script')[0];
                 script.parentNode.insertBefore(jsonp, script);        
-	}
+        }
 
         function showSubjects(data) {
                 //hide loading message
@@ -325,6 +315,29 @@ echo $q;
         </script>
                 </details>
                 <details>
+                <summary>Popular</summary>
+			<p>Here are a few of the most popular searches from our search logs. They might help.</p>
+			<p class="terms">  
+<?php
+                        // Set most popular search terms RDF URL
+                        $request = 'http://www.google.com/cse/api/010001021870615082419/cse/sgtwcccfbiq/queries?key='.$key.'&view=overall';
+                        // Read feed into SimpleXML object
+                        $getPopular = simplexml_load_file($request, 'SimpleXMLIterator');
+                        // Set limit of 5 terms to display
+                        $entries = new LimitIterator($getPopular->item, 0, 5);
+                        foreach ($entries as $entry) {
+                                $popularTerm = htmlentities($entry->title);
+?>
+                        <a href="./index.php?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a>
+<?php
+                        }
+?>
+			</p>
+		</details>
+<?php
+} //end conditional checking for large result sets - anything over 25 results triggers these suggestions
+?>
+                <details>
                 <summary>People</summary>
                         <p>Are you looking for a person or wanting to chat about research? See our <a href="http://www.lib.montana.edu/services/liaisons-by-department.html">research liasions</a> or <a href="http://www.lib.montana.edu/people/expertise.php">people by subject expertise</a>.</p>
                 </details>
@@ -338,7 +351,7 @@ echo $q;
 //forecast.io api docs at https://developer.forecast.io/docs/v2
 
 //ADD YOUR_FORECAST.IO_API_KEY_HERE
-$key = 'ADD-YOUR-FORECAST.IO-API-KEY-HERE';
+$key = 'bd9363de1a48419bf2af38384f5afe8b';
 //set default value for latitude to youtube API
 $lat = isset($_REQUEST['lat']) ? strip_tags(floatval($_REQUEST['lat'])) : '49.246292';
 //set default value for latitude to youtube API
@@ -363,10 +376,9 @@ if ($request === FALSE) {
 //$result = json_decode($request,true);
 $result = json_decode($request);
 
-if (strlen($result->latitude) > 2):
+if (strlen($result->latitude) > 2) {
 ?>
-<a name="weather"></a>
-<p>Current Weather</p>
+<p>An offer based on local weather.</p>
 <dl>
 <?php
 //dependency on skycons.js to make animated weather icons appear - https://github.com/darkskyapp/skycons
@@ -380,15 +392,7 @@ $pressure = $result->currently->pressure;
 $precipProbability = $result->currently->precipProbability;
 $cloudCover = $result->currently->cloudCover;
 ?>
-        <dt>Current Conditions:</dt>
         <!--<dd><figure><canvas id="<?php //echo $icon; ?>" width="64" height="64"></canvas></figure></dd>-->
-	<dd>summary: <?php echo $summary; ?></dd>
-        <dd>icon shorthand: <?php echo $icon; ?></dd>
-        <dd>temperature: <?php echo $temperature; ?></dd>
-        <dd>wind: <?php echo $wind; ?></dd>
-        <dd>pressure: <?php echo $pressure; ?></dd>
-        <dd>chance of precip: <?php echo $precipProbability; ?></dd>
-        <dd>cloud cover: <?php echo $cloudCover; ?></dd>
 <?php
 if ($cloudCover > .3) {
 ?>
@@ -398,13 +402,13 @@ if ($cloudCover > .3) {
 ?>
 	<p>Here comes the sun, stop in for a cup of something cool. Check out the <a href="http://www.montana.edu/ufs/menus/brewed_awakening.php">"Brewed Awakening" hours and menu.</a></p>
 <?php
-}
-else: //show no results message
+} // end suggestion based on weather
+} else {
 ?>
 <p class="subHeading">No forecast.io results for <strong><?php urldecode($q); ?></strong>.</p>
 <p class="control"><a href="<?php echo htmlentities(strip_tags(basename(__FILE__))); ?>" class="refresh">Reset the page</a></p>
 <?php
-endif;
+} //end weather conditional
 ?>
                 </details>
 <?php

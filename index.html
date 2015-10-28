@@ -212,10 +212,9 @@ $cueWords = array( "about", "above", "across", "after", "afterwards", "again", "
 $qToken = strtok($q, "+");
 if (in_array(strtolower($qToken), $cueWords)) {
 ?>
-                <details>
+                <details open>
                 <summary>It looks like you are asking a question.</summary>
-                        <p>Do you want to talk to a person?</p>
-			<p><a href="http://ask.lib.montana.edu/ask">Talk to a Librarian</a></p>
+                        <p>Do you want to <a href="http://ask.lib.montana.edu/ask">talk to a librarian</a>?</p>
                 </details>
                 <details>
                 <summary>Research Help</summary>

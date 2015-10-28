@@ -200,8 +200,8 @@ input {border-radius:4px;outline:none;}
 		<h1>Facets</h1>
 		<p>Not seeing what you need? Watch the space below for refinements.
 <?php
-	if (!is_null($q)) {
-        // Process query
+if (!is_null($q)) {
+	// Process query
 
 //echo $q;
 
@@ -228,8 +228,8 @@ if (in_array(strtolower($qToken), $cueWords)) {
 <?php
 }//end check for natural language question words
 
-        // Set URL for the Google Custom Search API call
-        $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(is_null($sort) ? "" : "&sort=$sort")."&num=$limit&start=$start&prettyprint=true&q=$q".(is_null($facet) ? "" : "&hq=$facet");
+// Set URL for the Google Custom Search API call
+$url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(is_null($sort) ? "" : "&sort=$sort")."&num=$limit&start=$start&prettyprint=true&q=$q".(is_null($facet) ? "" : "&hq=$facet");
 
         // View source to see raw API call - REMOVE from production code
         echo '<!--' . $url . '-->';
@@ -249,25 +249,6 @@ if (in_array(strtolower($qToken), $cueWords)) {
         // Get values in json data for number of search results returned
         $totalItems = isset($_GET['totalItems']) ?  strip_tags((int)$_GET['totalItems']) : $result['queries']['request'][0]['totalResults'];
 
-        if ($totalItems <= 0) { 
-        // Empty results, display message to user
-                echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
-        } else {
-                // Make sure some results were returned, show results as html with result numbering and pagination
-?>
-		<details>
-                <summary>Categories</summary>
-		<p class="terms">
-		<a href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">All</a>
-<?php
-
-		foreach ($getFacets['context']['facets'] as $key) {
-			echo " <a href=\"./index.html?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a> ";
-		}
-?>
-		</p>
-		</details>
-<?php
 	if ($totalItems > 30) { 
 ?>
 		<details>
@@ -345,7 +326,25 @@ if (in_array(strtolower($qToken), $cueWords)) {
 		</details>
 <?php
 } //end conditional checking for large result sets - anything over 25 results triggers these suggestions
+
+        if ($totalItems <= 0) { 
+        // Empty results, display message to user
+                echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
+        } else {
+                // Make sure some results were returned, show results as html with result numbering and pagination
 ?>
+                <details>
+                <summary>Categories</summary>
+                <p class="terms">
+                <a href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">All</a>
+<?php
+
+                foreach ($getFacets['context']['facets'] as $key) {
+                        echo " <a href=\"./index.html?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a> ";
+                }
+?>
+                </p>
+                </details>
                 <details id="offer">
                 <summary>Offers</summary>
 <?php
@@ -413,8 +412,8 @@ if ($cloudCover > .3) {
 ?>
                 </details>
 <?php
-                } // End else -- $totalItems <= 0
-        } // End (!is_null($q))
+	} // //end conditional checking for any result sets - these are the default facets
+} // End (!is_null($q))
 ?>
 		<p>With this prototype, I'm looking at ways that the search act can be treated as a conversation.</p>
                 <p class="info"><a href="about.html">What is this?</a> <a href="privacy.html">Privacy?</a></p>

@@ -139,11 +139,11 @@ input {border-radius:4px;outline:none;}
 ?>
 	<p class="sort">
 	<span class="sort-heading">Sort:</span> 
-	<a href="./index.html?q=<?php echo urlencode($q); ?>">Relevance</a> or <a href="./index.html?sort=date&amp;q=<?php echo urlencode($q); ?>">Date</a>
+	<a href="./index.html?q=<?php echo $q; ?>">Relevance</a> or <a href="./index.html?sort=date&amp;q=<?php echo $q; ?>">Date</a>
 <?php if (!is_null($facet)) { 
 ?>
 	 | <span class="sort-heading">Category: 
-	<a href="./index.html?q=<?php echo urlencode($q); ?>&amp;facet=<?php echo urlencode($facet); ?>"><?php echo urldecode(ucfirst($facet)); ?></a>
+	<a href="./index.html?q=<?php echo $q; ?>&amp;facet=<?php echo $facet; ?>"><?php echo urldecode(ucfirst($facet)); ?></a>
 <?php }//end check for facet ?> 
 	</p>
 	<p class="result"><strong><?php echo '"'.urldecode($q).'"'; ?></strong> (About <?php echo $totalItems; ?> results)</p>

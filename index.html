@@ -42,11 +42,10 @@
 	$v = isset($_GET['v']) ? strip_tags((int)$_GET['v']) : 'v1';
 
 	// Set user API key for Google Custom Search API
-	$key = isset($_GET['key']) ? $_GET['key'] : 'AIzaSyDD_m3LerirQ6iTJIoyMaxiQoiRBqKEjd0';
+	$key = isset($_GET['key']) ? $_GET['key'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-API-KEY-HERE';
 
 	// Set user ID for Google custom search engine
-	$id = isset($_GET['id']) ? $_GET['id'] : '010001021870615082419:c11y2dyi94c';
-
+	$id = isset($_GET['id']) ? $_GET['id'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-ENGINE-ID-HERE';
 ?>
                 <form role="search" method="get" action="index.html">
                         <input class="search" type="text" name="q" id="q" tabindex="1" placeholder="Search..." value="<?php if (!is_null($q)) { echo urldecode($q); } ?>" required />
@@ -296,8 +295,7 @@ $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(i
 <?php
 //forecast.io api docs at https://developer.forecast.io/docs/v2
 
-//ADD YOUR_FORECAST.IO_API_KEY_HERE
-$key = 'bd9363de1a48419bf2af38384f5afe8b';
+$key = 'ADD-YOUR-FORECAST.IO-API-KEY-HERE';
 //set default value for latitude to youtube API
 $lat = isset($_REQUEST['lat']) ? strip_tags(floatval($_REQUEST['lat'])) : '49.246292';
 //set default value for latitude to youtube API

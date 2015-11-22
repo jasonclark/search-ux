@@ -47,7 +47,7 @@
 	// Set user ID for Google custom search engine
 	$id = isset($_GET['id']) ? $_GET['id'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-ENGINE-ID-HERE';
 ?>
-                <form role="search" method="get" action="index.html">
+                <form method="get" action="index.html">
                         <input class="search" type="text" name="q" id="q" tabindex="1" placeholder="Search..." value="<?php if (!is_null($q)) { echo urldecode($q); } ?>" required />
                         <input class="button" type="submit" value="Search" />
                 </form>
@@ -207,7 +207,7 @@ $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(i
 		</details>
 		<details>
                 <summary>Topics by Location</summary>
-                        <p id="message" style="display:none"><img src="./meta/img/loading.gif" id="loading" /> Waiting for Godot...</p>
+                        <p id="message" style="display:none"><img alt="loading" src="./meta/img/loading.gif" id="loading" /> Waiting for Godot...</p>
                         <p id="terms" class="terms"> </p>
         <script id="worker" type="text/javascript">
         var msg = document.getElementById("message");

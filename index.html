@@ -86,11 +86,14 @@
 	<p class="sort">
 	<span class="sort-heading">Sort:</span> 
 	<a href="./index.html?q=<?php echo $q; ?>">Relevance</a> or <a href="./index.html?sort=date&amp;q=<?php echo $q; ?>">Date</a>
-<?php if (!is_null($facet)) { 
+<?php 
+	if (!is_null($facet)) { 
 ?>
 	 | <span class="sort-heading">Category: 
 	<a href="./index.html?q=<?php echo $q; ?>&amp;facet=<?php echo $facet; ?>"><?php echo urldecode(ucfirst($facet)); ?></a>
-<?php }//end check for facet ?> 
+<?php 
+	}//end check for facet 
+?> 
 	</p>
 	<p class="result"><strong><?php echo '"'.urldecode($q).'"'; ?></strong> (About <?php echo $totalItems; ?> results)</p>
 		<ul class="result">
@@ -323,7 +326,6 @@ $result = json_decode($request);
 if (strlen($result->latitude) > 2) {
 ?>
 <p>An offer based on local weather.</p>
-<dl>
 <?php
 //dependency on skycons.js to make animated weather icons appear - https://github.com/darkskyapp/skycons
 
@@ -336,7 +338,7 @@ $pressure = $result->currently->pressure;
 $precipProbability = $result->currently->precipProbability;
 $cloudCover = $result->currently->cloudCover;
 ?>
-        <!--<dd><figure><canvas id="<?php //echo $icon; ?>" width="64" height="64"></canvas></figure></dd>-->
+        <!--<p><figure><canvas id="<?php //echo $icon; ?>" width="64" height="64"></canvas></figure></p>-->
 <?php
 if ($cloudCover > .3) {
 ?>

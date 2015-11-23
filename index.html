@@ -6,7 +6,7 @@
         <title>Search - Prototype App for "Improving Search UX using Query Analysis and Machine Cues"</title>
         <meta name="description" content="Search Application, Prototype for Digital Library Forum 2015 presentation - Is there a Ghost in the [Search] Machine? Improving Search UX using Query Analysis and Machine Cues">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" />
 	<link rel="stylesheet" href="./meta/styles/main.css" />
 <!--[if IE]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,9 +79,11 @@
 
 	if ($totalItems <= 0) {
 	// Empty results, display message to user
-		echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
+?>
+	<p><strong>Sorry, there were no results</strong></p>
+<?php
 	} else {
-		// Make sure some results were returned, show results as html with result numbering and pagination
+	// Make sure some results were returned, show results as html with result numbering and pagination
 ?>
 	<p class="sort">
 	<span class="sort-heading">Sort:</span> 
@@ -277,9 +279,11 @@ $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(i
 
         if ($totalItems <= 0) { 
         // Empty results, display message to user
-                echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
+?>
+		<p><strong>Sorry, there were no results</strong></p>
+<?php
         } else {
-                // Make sure some results were returned, show results as html with result numbering and pagination
+	// Make sure some results were returned, show results as html with result numbering and pagination
 ?>
                 <details>
                 <summary>Categories</summary>

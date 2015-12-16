@@ -46,6 +46,7 @@
 
 	// Set user ID for Google custom search engine
 	$id = isset($_GET['id']) ? $_GET['id'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-ENGINE-ID-HERE';
+
 ?>
                 <form method="get" action="index.html">
                         <input class="search" type="text" name="q" id="q" tabindex="1" placeholder="Search..." value="<?php if (!is_null($q)) { echo urldecode($q); } ?>" required />
@@ -79,22 +80,20 @@
 
 	if ($totalItems <= 0) {
 	// Empty results, display message to user
-?>
-	<p><strong>Sorry, there were no results</strong></p>
-<?php
+		echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
 	} else {
-	// Make sure some results were returned, show results as html with result numbering and pagination
+		// Make sure some results were returned, show results as html with result numbering and pagination
 ?>
 	<p class="sort">
 	<span class="sort-heading">Sort:</span> 
 	<a href="./index.html?q=<?php echo $q; ?>">Relevance</a> or <a href="./index.html?sort=date&amp;q=<?php echo $q; ?>">Date</a>
-<?php 
+<?php
 	if (!is_null($facet)) { 
 ?>
 	 | <span class="sort-heading">Category: 
 	<a href="./index.html?q=<?php echo $q; ?>&amp;facet=<?php echo $facet; ?>"><?php echo urldecode(ucfirst($facet)); ?></a>
-<?php 
-	}//end check for facet 
+<?php
+	}//end check for facet
 ?> 
 	</p>
 	<p class="result"><strong><?php echo '"'.urldecode($q).'"'; ?></strong> (About <?php echo $totalItems; ?> results)</p>
@@ -174,7 +173,27 @@ if (in_array(strtolower($qToken), $cueWords)) {
                 <details>
                 <summary>FAQ</summary>
                         <p>It looks like you have a question. We have a list of common library questions in <a href="http://ask.lib.montana.edu/">our FAQ</a> or we can <a href="http://ask.lib.montana.edu/search/?q=<?php echo $q; ?>">run your search in our knowledgebase</a>.</p>
-                </details>
+		</details>
+		<details open>
+		<summary>Research Offer</summary>
+<?php
+		//show research offer by comparing current year-month-day to fall/spring year-month-day range
+		$year = date("Y");
+		$today = strtotime(date("Y-m-d"));
+		$researchOfferFallBegin = strtotime("$year-10-1");
+		$researchOfferFallEnd = strtotime("$year-12-18");
+		$researchOfferSpringBegin = strtotime("$year-03-01");
+		$researchOfferSpringEnd = strtotime("$year-05-18");
+
+		if ($today > $researchOfferFallBegin && $today < $researchOfferFallEnd) {
+			echo '<p>It is that time of the year. The days are shorter and research papers are happening. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a></p>';
+		} elseif ($today > $researchOfferSpringBegin && $today < $researchOfferSpringEnd) {
+			echo '<p>It is that time of the year. Spring fever is almost here, but you have a research paper to write. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a></p>';
+		} else {
+			echo 'The semester is just getting started. You still have some time to read. <a href="https://www.lib.montana.edu/locations/first.html">Check out our browse collection</a></p>';  
+		}
+?>
+		</details>
 <?php
 }//end check for natural language question words
 
@@ -279,11 +298,9 @@ $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(i
 
         if ($totalItems <= 0) { 
         // Empty results, display message to user
-?>
-		<p><strong>Sorry, there were no results</strong></p>
-<?php
+                echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
         } else {
-	// Make sure some results were returned, show results as html with result numbering and pagination
+                // Make sure some results were returned, show results as html with result numbering and pagination
 ?>
                 <details>
                 <summary>Categories</summary>
@@ -302,7 +319,8 @@ $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(i
 <?php
 //forecast.io api docs at https://developer.forecast.io/docs/v2
 
-$key = 'ADD-YOUR-FORECAST.IO-API-KEY-HERE';
+//ADD YOUR_FORECAST.IO_API_KEY_HERE
+$key = 'bd9363de1a48419bf2af38384f5afe8b';
 //set default value for latitude to youtube API
 $lat = isset($_REQUEST['lat']) ? strip_tags(floatval($_REQUEST['lat'])) : '49.246292';
 //set default value for latitude to youtube API

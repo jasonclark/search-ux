@@ -174,26 +174,6 @@ if (in_array(strtolower($qToken), $cueWords)) {
                 <summary>FAQ</summary>
                         <p>It looks like you have a question. We have a list of common library questions in <a href="http://ask.lib.montana.edu/">our FAQ</a> or we can <a href="http://ask.lib.montana.edu/search/?q=<?php echo $q; ?>">run your search in our knowledgebase</a>.</p>
 		</details>
-		<details open>
-		<summary>Research Offer</summary>
-<?php
-		//show research offer by comparing current year-month-day to fall/spring year-month-day range
-		$year = date("Y");
-		$today = strtotime(date("Y-m-d"));
-		$researchOfferFallBegin = strtotime("$year-10-1");
-		$researchOfferFallEnd = strtotime("$year-12-18");
-		$researchOfferSpringBegin = strtotime("$year-03-01");
-		$researchOfferSpringEnd = strtotime("$year-05-18");
-
-		if ($today > $researchOfferFallBegin && $today < $researchOfferFallEnd) {
-			echo '<p>It is that time of the year. The days are shorter and research papers are happening. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a></p>';
-		} elseif ($today > $researchOfferSpringBegin && $today < $researchOfferSpringEnd) {
-			echo '<p>It is that time of the year. Spring fever is almost here, but you have a research paper to write. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a></p>';
-		} else {
-			echo 'The semester is just getting started. You still have some time to read. <a href="https://www.lib.montana.edu/locations/first.html">Check out our browse collection</a></p>';  
-		}
-?>
-		</details>
 <?php
 }//end check for natural language question words
 
@@ -347,7 +327,7 @@ $result = json_decode($request);
 
 if (strlen($result->latitude) > 2) {
 ?>
-<p>An offer based on local weather.</p>
+<p>Offers based on local weather and current date.</p>
 <?php
 //dependency on skycons.js to make animated weather icons appear - https://github.com/darkskyapp/skycons
 
@@ -377,11 +357,27 @@ if ($cloudCover > .3) {
 <p class="control"><a href="<?php echo htmlentities(strip_tags(basename(__FILE__))); ?>" class="refresh">Reset the page</a></p>
 <?php
 } //end weather conditional
+
+//show research offer by comparing current year-month-day to fall/spring year-month-day range
+$year = date("Y");
+$today = strtotime(date("Y-m-d"));
+$researchOfferFallBegin = strtotime("$year-10-1");
+$researchOfferFallEnd = strtotime("$year-12-18");
+$researchOfferSpringBegin = strtotime("$year-03-01");
+$researchOfferSpringEnd = strtotime("$year-05-18");
+
+if ($today > $researchOfferFallBegin && $today < $researchOfferFallEnd) {
+		echo '<p>It is that time of the year. The days are shorter and research papers are happening. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a></p>';
+} elseif ($today > $researchOfferSpringBegin && $today < $researchOfferSpringEnd) {
+		echo '<p>It is that time of the year. Spring fever is almost here, but you have a research paper to write. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a></p>';
+} else {
+		echo 'The semester is just getting started. You still have some time to read. <a href="https://www.lib.montana.edu/locations/first.html">Check out our browse collection</a></p>';  
+} //end research offer based on date conditional
 ?>
-                </details>
+		</details>
 <?php
-	} // //end conditional checking for any result sets - these are the default facets
-} // End (!is_null($q))
+	} //end conditional checking for any result sets - these are the default facets
+} //end (!is_null($q))
 ?>
 		<p>With this prototype, I'm looking at ways that the search act can be treated as a conversation.</p>
                 <p class="info"><a href="about.html">What is this?</a> <a href="privacy.html">Privacy?</a></p>

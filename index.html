@@ -1,3 +1,37 @@
+<?php
+// Number of records to display per page (1 - 10)
+$recordsPerPage = 10;
+
+// Set default value for query
+$q = isset($_GET['q']) ? urlencode(strip_tags(trim($_GET['q']))) : null; 
+
+// Set default value for API format
+$form = isset($_GET['form']) ? htmlentities(strip_tags($_GET['form'])) : 'json'; 
+
+// Set default value for page length (number of entries to display)
+$limit = isset($_GET['limit']) ? strip_tags((int)$_GET['limit']) : "$recordsPerPage";
+
+// Set default value for page start index
+$start = isset($_GET['start']) ? strip_tags((int)$_GET['start']) : '1';
+
+// Set default value for facet browse
+$facet = isset($_GET['facet']) ? htmlentities(strip_tags($_GET['facet'])) : null; 
+
+// Set default value for results sorting 
+$sort = isset($_GET['sort']) ? htmlentities(strip_tags($_GET['sort'])) : null; 
+
+// Set API version for Google Custom Search API
+$v = isset($_GET['v']) ? strip_tags((int)$_GET['v']) : 'v1'; 
+
+// Set user API key for Google Custom Search API
+$key = isset($_GET['key']) ? $_GET['key'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-API-KEY-HERE';
+
+// Set user ID for Google custom search engine
+$id = isset($_GET['id']) ? $_GET['id'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-ENGINE-ID-HERE';
+
+// Set forecast.io API key
+$forecastKey = 'ADD-YOUR-FORECAST.IO-API-KEY-HERE';
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,43 +50,10 @@
 <div class="flexbox fullheight fullwidth">
 	<div class="flex-search" role="main"> 
 		<h1>Ten Blue Links</h1>
-<?php
-	// Number of records to display per page (1 - 10)
-	$recordsPerPage = 10;
-
-	// Set default value for query
-	$q = isset($_GET['q']) ? urlencode(strip_tags(trim($_GET['q']))) : null;
-
-	// Set default value for API format
-	$form = isset($_GET['form']) ? htmlentities(strip_tags($_GET['form'])) : 'json';
-
-	// Set default value for page length (number of entries to display)
-	$limit = isset($_GET['limit']) ? strip_tags((int)$_GET['limit']) : "$recordsPerPage";
-
-	// Set default value for page start index
-	$start = isset($_GET['start']) ? strip_tags((int)$_GET['start']) : '1';
-
-	// Set default value for facet browse
-	$facet = isset($_GET['facet']) ? htmlentities(strip_tags($_GET['facet'])) : null;
-
-	// Set default value for results sorting
-	$sort = isset($_GET['sort']) ? htmlentities(strip_tags($_GET['sort'])) : null;
-
-	// Set API version for Google Custom Search API
-	$v = isset($_GET['v']) ? strip_tags((int)$_GET['v']) : 'v1';
-
-	// Set user API key for Google Custom Search API
-	$key = isset($_GET['key']) ? $_GET['key'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-API-KEY-HERE';
-
-	// Set user ID for Google custom search engine
-	$id = isset($_GET['id']) ? $_GET['id'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-ENGINE-ID-HERE';
-
-?>
                 <form method="get" action="index.html">
                         <input class="search" type="text" name="q" id="q" tabindex="1" placeholder="Search..." value="<?php if (!is_null($q)) { echo urldecode($q); } ?>" required />
                         <input class="button" type="submit" value="Search" />
                 </form>
-
 <?php
 	if (!is_null($q)) {
 	// Process query
@@ -299,15 +300,13 @@ $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(i
 <?php
 //forecast.io api docs at https://developer.forecast.io/docs/v2
 
-//ADD YOUR_FORECAST.IO_API_KEY_HERE
-$key = 'ADD-YOUR-FORECAST.IO-API-KEY-HERE';
-//set default value for latitude to youtube API
+//set default value for latitude
 $lat = isset($_REQUEST['lat']) ? strip_tags(floatval($_REQUEST['lat'])) : '49.246292';
-//set default value for latitude to youtube API
+//set default value for latitude
 $lng = isset($_REQUEST['lng']) ? strip_tags(floatval($_REQUEST['lng'])) : '-123.116226';
 
-//set base url for our opensearch request to youtube.com data API
-$apiURL = 'https://api.forecast.io/forecast/'.$key.'/'.$lat.','.$lng.'?exclude=minutely,hourly';
+//set base url for request to forecast.io API
+$apiURL = 'https://api.forecast.io/forecast/'.$forecastKey.'/'.$lat.','.$lng.'?exclude=minutely,hourly';
 
 //for testing purposes show actual request to API - REMOVE when finished
 //echo $apiURL;

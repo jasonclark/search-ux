@@ -1,15 +1,12 @@
 <?php
-// Number of records to display per page (1 - 10)
-$recordsPerPage = 10;
-
 // Set default value for query
 $q = isset($_GET['q']) ? urlencode(strip_tags(trim($_GET['q']))) : null; 
 
 // Set default value for API format
 $form = isset($_GET['form']) ? htmlentities(strip_tags($_GET['form'])) : 'json'; 
 
-// Set default value for page length (number of entries to display)
-$limit = isset($_GET['limit']) ? strip_tags((int)$_GET['limit']) : "$recordsPerPage";
+// Set default value for page length (number of records to display)
+$limit = isset($_GET['limit']) ? strip_tags((int)$_GET['limit']) : '10';
 
 // Set default value for page start index
 $start = isset($_GET['start']) ? strip_tags((int)$_GET['start']) : '1';

@@ -21,13 +21,13 @@ $sort = isset($_GET['sort']) ? htmlentities(strip_tags($_GET['sort'])) : null;
 $v = isset($_GET['v']) ? strip_tags((int)$_GET['v']) : 'v1';
 
 // Set user API key for Google Custom Search API
-$key = isset($_GET['key']) ? $_GET['key'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-API-KEY-HERE';
+$key = isset($_GET['key']) ? $_GET['key'] : 'AIzaSyDD_m3LerirQ6iTJIoyMaxiQoiRBqKEjd0';
 
 // Set user ID for Google custom search engine
-$id = isset($_GET['id']) ? $_GET['id'] : 'YOUR-GOOGLE-CUSTOM-SEARCH-ENGINE-ID-HERE';
+$id = isset($_GET['id']) ? $_GET['id'] : '010001021870615082419:c11y2dyi94c';
 
 // Set forecast.io API key
-$forecastKey = 'ADD-YOUR-FORECAST.IO-API-KEY-HERE';
+$forecastKey = 'bd9363de1a48419bf2af38384f5afe8b';
 ?>
 <!doctype html>
 <html lang="en">
@@ -315,11 +315,17 @@ $researchOfferSpringBegin = strtotime("$year-03-01");
 $researchOfferSpringEnd = strtotime("$year-05-18");
 
 if ($today > $researchOfferFallBegin && $today < $researchOfferFallEnd) {
-                echo '<p>It is that time of the year. The days are shorter and research papers are happening. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a>.</p>';
+?>
+		<p>It is that time of the year. The days are shorter and research papers are happening. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a>.</p>
+<?php
 } elseif ($today > $researchOfferSpringBegin && $today < $researchOfferSpringEnd) {
-                echo '<p>It is that time of the year. Spring fever is almost here, but you have a research paper to write. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a>.</p>';
+?>
+		<p>It is that time of the year. Spring fever is almost here, but you have a research paper to write. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a>.</p>
+<?php
 } else {
-                echo '<p>The semester is just getting started. You still have some time to read. <a href="https://www.lib.montana.edu/locations/first.html">Check out our browse collection</a>.</p>';  
+?>
+		<p>The semester is just getting started. You still have some time to read. <a href="https://www.lib.montana.edu/locations/first.html">Check out our browse collection</a>.</p>
+<?php
 } //end research offer based on date conditional
 
 //forecast.io api docs at https://developer.forecast.io/docs/v2

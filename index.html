@@ -275,7 +275,7 @@ $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(i
                         foreach ($entries as $entry) {
                                 $popularTerm = htmlentities($entry->title);
 ?>
-                        <a href="./index.php?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a>
+                        <a href="./index.html?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a>
 <?php
                         }
 ?>

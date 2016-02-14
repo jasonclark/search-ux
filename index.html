@@ -5,11 +5,8 @@ $q = isset($_GET['q']) ? urlencode(strip_tags(trim($_GET['q']))) : null;
 // Set default value for API format
 $form = isset($_GET['form']) ? htmlentities(strip_tags($_GET['form'])) : 'json';
 
-// Number of records to display per page; NOTE: dependency for $next and $previous links 
-$recordsPerPage = '10';
-
-// Set default value for page length (number of records to display)
-$limit = isset($_GET['limit']) ? strip_tags((int)$_GET['limit']) : "$recordsPerPage";
+// Set default value for page length (number of records to display per page)
+$limit = isset($_GET['limit']) ? strip_tags((int)$_GET['limit']) : '10';
 
 // Set default value for page start index
 $start = isset($_GET['start']) ? strip_tags((int)$_GET['start']) : '1';
@@ -126,11 +123,11 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 		</ul>
 <?php
 		// Calculate new start value for "previous" link
-		$previous = ($start > 1) ? ($start - $recordsPerPage) : null;
+		$previous = ($start > 1) ? ($start - $limit) : null;
 		$previous = (!is_null($previous) && ($previous < 1)) ? 1 : $previous;
 
 		// Calculate new start value for "next" link
-		$next = (($start + $recordsPerPage) <= $totalItems) ? ($start + $recordsPerPage) : null;
+		$next = (($start + $limit) <= $totalItems) ? ($start + $limit) : null;
 		if ($next >= 100) { $next = null; }
 
 		// Display previous and next links if applicable

@@ -371,16 +371,19 @@ $cloudCover = $result->currently->cloudCover;
 	if ($cloudCover > .3) {
 ?>
 	<p>It's cloudy and cold, stop in for a cup of something warm. Check out the <a href="http://www.montana.edu/ufs/menus/brewed_awakening.php">"Brewed Awakening" hours and menu</a>.</p>
+	</details>
 <?php
 	} else {
 ?>
 	<p>Here comes the sun, stop in for a cup of something cool. Check out the <a href="http://www.montana.edu/ufs/menus/brewed_awakening.php">"Brewed Awakening" hours and menu</a>.</p>
+	</details>
 <?php
 	} // end suggestion based on weather
 	} else {
 ?>
 	<p class="subHeading">No forecast.io results for <strong><?php urldecode($q); ?></strong>.</p>
 	<p class="control"><a href="<?php echo htmlentities(strip_tags(basename(__FILE__))); ?>" class="refresh">Reset the page</a></p>
+	</details>
 <?php
 	} //end weather conditional
 	} //end conditional checking for any result sets - these are the default facets

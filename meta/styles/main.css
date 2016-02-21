@@ -31,6 +31,7 @@ input {border-radius:4px;outline:none;}
 .previous,.next {padding:.25rem .5rem;border:1px solid #207cca;border-radius:.25rem;font-size:.8em;}
 .previous:before {content: "\000AB\ ";}
 .next:after {content:" \000BB\ ";}
+.result {overflow-wrap:break-word;word-wrap:break-word;-ms-word-break:break-all;word-break:break-all;word-break:break-word;-ms-hyphens:auto;-moz-hyphens:auto;-webkit-hyphens:auto;hyphens:auto;}
 .sort {margin:0;font-size:.8125rem;}
 .terms a:after { content: ", "; }
 .terms a:last-child:after { content: ""; }

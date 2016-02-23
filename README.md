@@ -16,4 +16,4 @@ Search Application for "Improving Search UX using Query Analysis and Machine Cue
 
 [jason clark]: <http://www.jasonclark.info>
 [@jaclark]: <https://twitter.com/jaclark>
-[Slides]: <http://www.lib.montana.edu/~jason/talks.php>
+[Slides]: <http://www.lib.montana.edu/~jason/talks.html>

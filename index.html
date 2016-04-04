@@ -92,7 +92,7 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 	} else {
 		// Make sure some results were returned, show results as html with result numbering and pagination
 ?>
-	<p class="sort">
+	<p class="sort" role="toolbar" aria-label="sorting options" aria-controls="sortable">
 	<span class="sort-heading">Sort:</span> 
 	<a href="./index.html?q=<?php echo $q; ?>">Relevance</a> or <a href="./index.html?sort=date&amp;q=<?php echo $q; ?>">Date</a>
 <?php
@@ -105,7 +105,7 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 ?> 
 	</p>
 	<p class="result"><strong><?php echo '"'.urldecode($q).'"'; ?></strong> (About <?php echo $totalItems; ?> results)</p>
-		<ul class="result">
+		<ul class="result" id="sortable">
 <?php
 			foreach ($result['items'] as $item) {
 				$link = rawurldecode($item['link']);

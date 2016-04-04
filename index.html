@@ -57,7 +57,7 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 <div class="flexbox fullheight fullwidth">
 	<div class="flex-search" role="main"> 
 		<h1>Ten Blue Links</h1>
-		<form method="get" action="index.html">
+		<form role="search" method="get" action="index.html">
 			<input class="search" type="text" name="q" id="q" tabindex="1" placeholder="Search..." value="<?php if (!is_null($q)) { echo urldecode($q); } ?>" required />
 			<input class="button" type="submit" value="Search" />
 		</form>

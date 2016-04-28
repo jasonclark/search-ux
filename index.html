@@ -89,15 +89,15 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 	if ($totalItems <= 0) {
 	// Empty results, display message to user
 ?>
-		<p><strong>Sorry, no results here.</strong> &#9785;</p>
-		<p>Try the suggestions below or enter a new query above.</p>
-		<ul>
-			<li>Check your spelling.</li>
-			<li>Try more general words.</li>
-			<li>Try different words that mean the same thing.</li>
-			<li>Broaden your search by using fewer words.</li>
-			<li><a href="http://ask.lib.montana.edu/ask">Talk to a librarian.</a></li>
-		</ul>
+	<p><strong>Sorry, no results here.</strong> &#9785;</p>
+	<p>Try the suggestions below or enter a new query above.</p>
+	<ul>
+		<li>Check your spelling.</li>
+		<li>Try more general words.</li>
+		<li>Try different words that mean the same thing.</li>
+		<li>Broaden your search by using fewer words.</li>
+		<li><a href="http://ask.lib.montana.edu/ask">Talk to a librarian.</a></li>
+	</ul>
 <?php
 	} else {
 		// Make sure some results were returned, show results as html with result numbering and pagination

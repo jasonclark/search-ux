@@ -296,8 +296,10 @@ $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(i
 
         if ($totalItems <= 0) { 
         // Empty results, display message to user
-                echo '<p><strong>Sorry, there were no results</strong></p>'."\n";
-        } else {
+?>
+	<p><strong>Sorry, there were no results.</strong> &#9785;</p>
+<?php        
+	} else {
                 // Make sure some results were returned, show results as html with result numbering and pagination
 ?>
                 <details>

@@ -89,7 +89,7 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 	if ($totalItems <= 0) {
 	// Empty results, display message to user
 ?>
-	<p><strong>Sorry, there were no results.</strong> &#9785;</p>
+	<p><strong>Oops! There were no results.</strong> &#9785;</p>
 	<p>A few suggestions:</p>
 	<ul>
 		<li>Check your spelling.</li>
@@ -100,7 +100,7 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 	</ul>
 <?php
 	} else {
-		// Make sure some results were returned, show results as html with result numbering and pagination
+	// Make sure some results were returned, show results as html with result numbering and pagination
 ?>
 	<p class="sort" role="toolbar" aria-label="sorting options" aria-controls="sortable">
 	<span class="sort-heading">Sort:</span> 
@@ -169,7 +169,7 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 		<p>Not seeing what you need? Watch the space below for refinements.
 <?php
 if (!is_null($q)) {
-	// Process query
+// Process query
 
 //echo $q;
 
@@ -297,7 +297,7 @@ $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(i
         if ($totalItems <= 0) { 
         // Empty results, display message to user
 ?>
-	<p><strong>Sorry, there were no results.</strong> &#9785;</p>
+	<p><strong>Oops! There were no results.</strong> &#9785;</p>
 <?php        
 	} else {
                 // Make sure some results were returned, show results as html with result numbering and pagination

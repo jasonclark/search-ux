@@ -147,13 +147,13 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 <?php
 			if (!is_null($previous)) {
 ?>
-			<li><a class="previous" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $previous; ?>">Previous</a></li>
+			<li><a class="previous" rel="prev" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $previous; ?>">Previous</a></li>
 
 <?php
 			}
 			if (!is_null($next)) {
 ?>
-			<li><a class="next" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $next; ?>">Next</a></li>
+			<li><a class="next" rel="next" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $next; ?>">Next</a></li>
 <?php
 			}
 ?>

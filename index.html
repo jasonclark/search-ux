@@ -143,7 +143,7 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 		// Display previous and next links if applicable
 		if (!is_null($previous) || !is_null($next)) {
 ?>
-		<ul class="pages">
+		<ul class="pages" role="navigation" aria-label="pagination">
 <?php
 			if (!is_null($previous)) {
 ?>

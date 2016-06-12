@@ -143,7 +143,9 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 		// Display previous and next links if applicable
 		if (!is_null($previous) || !is_null($next)) {
 ?>
-		<ul class="pages" role="navigation" aria-label="pagination">
+
+		<nav role="navigation" aria-label="pagination">
+		<ul class="pages">
 <?php
 			if (!is_null($previous)) {
 ?>
@@ -158,6 +160,7 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 			}
 ?>
 		</ul>
+		</nav>
 <?php
 			}
 		} // End else -- $totalItems <= 0

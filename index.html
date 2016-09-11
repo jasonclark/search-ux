@@ -55,12 +55,12 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
 </head>
 <body>
 <div class="flexbox fullheight fullwidth">
-	<div class="flex-search" role="main"> 
-		<h1>Ten Blue Links</h1>
-		<form role="search" method="get" action="index.html">
-			<input class="search" type="text" name="q" id="q" tabindex="1" placeholder="Search..." value="<?php if (!is_null($q)) { echo urldecode($q); } ?>" required />
-			<input class="button" type="submit" value="Search" />
-		</form>
+  <div class="flex-search" role="main"> 
+    <h1>Ten Blue Links</h1>
+    <form role="search" method="get" action="index.html">
+      <input class="search" type="text" name="q" id="q" tabindex="1" placeholder="Search..." value="<?php if (!is_null($q)) { echo urldecode($q); } ?>" required />
+      <input class="button" type="submit" value="Search" />
+    </form>
 <?php
 	if (!is_null($q)) {
 	// Process query
@@ -403,9 +403,9 @@ $cloudCover = $result->currently->cloudCover;
 	} //end conditional checking for any result sets - these are the default facets
 } //end (!is_null($q))
 ?>
-		<p>With this prototype, I'm looking at ways that the search act can be treated as a conversation.</p>
-                <p class="info"><a href="about.html">What is this?</a> <a href="privacy.html">Privacy?</a></p>
-	</div>
+    <p>With this prototype, I'm looking at ways that the search act can be treated as a conversation.</p>
+    <p class="info"><a href="about.html">What is this?</a> <a href="privacy.html">Privacy?</a></p>
+  </div>
 </div>
 </body>
 </html>

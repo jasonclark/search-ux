@@ -62,114 +62,111 @@ $forecastKey = 'YOUR-FORECAST.IO-API-KEY-HERE';
       <input class="button" type="submit" value="Search" />
     </form>
 <?php
-	if (!is_null($q)) {
-	// Process query
+if (!is_null($q)) {
+// Process query
 
-	// Set URL for the Google Custom Search API call
-	$url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(is_null($sort) ? "" : "&sort=$sort")."&num=$limit&start=$start&prettyprint=true&q=$q".(is_null($facet) ? "" : "&hq=$facet");
+// Set URL for the Google Custom Search API call
+$url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(is_null($sort) ? "" : "&sort=$sort")."&num=$limit&start=$start&prettyprint=true&q=$q".(is_null($facet) ? "" : "&hq=$facet");
 
-	// View source to see raw API call - REMOVE from production code
-	//echo '<!--' . $url . '-->';
+// View source to see raw API call - REMOVE from production code
+//echo '<!--' . $url . '-->';
 
-	// Build request and send to Google Ajax Search API
-	$request = file_get_contents($url);
+// Build request and send to Google Ajax Search API
+$request = file_get_contents($url);
 
-    	if ($request === FALSE) {
-		// API call failed, display message to user
-		echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
-		exit();
-    	}
+if ($request === FALSE) {
+  // API call failed, display message to user
+    echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
+  exit();
+}
 
-    	// Decode json object(s) out of response from Google Ajax Search API
-	$result = json_decode($request, true);
+// Decode json object(s) out of response from Google Ajax Search API
+$result = json_decode($request, true);
 
-    	// Get values in json data for number of search results returned
-	$totalItems = isset($_GET['totalItems']) ?  strip_tags((int)$_GET['totalItems']) : $result['queries']['request'][0]['totalResults'];
+// Get values in json data for number of search results returned
+$totalItems = isset($_GET['totalItems']) ?  strip_tags((int)$_GET['totalItems']) : $result['queries']['request'][0]['totalResults'];
 
-	if ($totalItems <= 0) {
-	// Empty results, display message to user
+if ($totalItems <= 0) {
+// Empty results, display message to user
 ?>
-	<p><strong>Oops! There were no results.</strong> &#9785;</p>
-	<p>A few suggestions:</p>
-	<ul>
-		<li>Check your spelling.</li>
-		<li>Try more general words.</li>
-		<li>Try different words that mean the same thing.</li>
-		<li>Broaden your search by using fewer words.</li>
-		<li><a href="http://ask.lib.montana.edu/ask">Talk to a librarian</a>. &#9786;</li>
-	</ul>
+    <p><strong>Oops! There were no results.</strong> &#9785;</p>
+    <p>A few suggestions:</p>
+    <ul>
+      <li>Check your spelling.</li>
+      <li>Try more general words.</li>
+      <li>Try different words that mean the same thing.</li>
+      <li>Broaden your search by using fewer words.</li>
+      <li><a href="http://ask.lib.montana.edu/ask">Talk to a librarian</a>. &#9786;</li>
+    </ul>
 <?php
-	} else {
-	// Make sure some results were returned, show results as html with result numbering and pagination
+} else {
+// Make sure some results were returned, show results as html with result numbering and pagination
 ?>
-	<p class="sort" role="toolbar" aria-label="sorting options" aria-controls="sortable">
-	<span class="sort-heading">Sort:</span> 
-	<a href="./index.html?q=<?php echo $q; ?>">Relevance</a> or <a href="./index.html?sort=date&amp;q=<?php echo $q; ?>">Date</a>
+    <p class="sort" role="toolbar" aria-label="sorting options" aria-controls="sortable">
+      <span class="sort-heading">Sort:</span> 
+      <a href="./index.html?q=<?php echo $q; ?>">Relevance</a> or <a href="./index.html?sort=date&amp;q=<?php echo $q; ?>">Date</a>
 <?php
-	if (!is_null($facet)) { 
+if (!is_null($facet)) { 
 ?>
-	 | <span class="sort-heading">Category: 
-	<a href="./index.html?q=<?php echo $q; ?>&amp;facet=<?php echo $facet; ?>"><?php echo urldecode(ucfirst($facet)); ?></a>
+      | <span class="sort-heading">Category: 
+      <a href="./index.html?q=<?php echo $q; ?>&amp;facet=<?php echo $facet; ?>"><?php echo urldecode(ucfirst($facet)); ?></a>
 <?php
-	}//end check for facet
+}//end check for facet
 ?> 
-	</p>
-	<p class="result"><strong><?php echo '"'.urldecode($q).'"'; ?></strong> (About <?php echo $totalItems; ?> results)</p>
-		<ul class="result" id="sortable">
+    </p>
+    <p class="result"><strong><?php echo '"'.urldecode($q).'"'; ?></strong> (About <?php echo $totalItems; ?> results)</p>
+    <ul class="result" id="sortable">
 <?php
-			foreach ($result['items'] as $item) {
-				$link = rawurldecode($item['link']);
+foreach ($result['items'] as $item) {
+  $link = rawurldecode($item['link']);
 ?>
-			<li>
-			<a href="<?php echo $link; ?>"><?php echo $item['htmlTitle']; ?></a>
-			<br />
-			<?php echo $item['htmlFormattedUrl']; ?>
-			<?php //echo $item['htmlSnippet']; ?>
-			<?php //echo 'id: '.$sr['cacheId']; ?>
-			</li>
+      <li>
+      <a href="<?php echo $link; ?>"><?php echo $item['htmlTitle']; ?></a>
+      <br />
+      <?php echo $item['htmlFormattedUrl']; ?>
+      <?php //echo $item['htmlSnippet']; ?>
+      <?php //echo 'id: '.$sr['cacheId']; ?>
+      </li>
 <?php
-			}
+}
 ?>
-		</ul>
+    </ul>
 <?php
-		// Calculate new start value for "previous" link
-		$previous = ($start > 1) ? ($start - $limit) : null;
-		$previous = (!is_null($previous) && ($previous < 1)) ? 1 : $previous;
+// Calculate new start value for "previous" link
+$previous = ($start > 1) ? ($start - $limit) : null;
+$previous = (!is_null($previous) && ($previous < 1)) ? 1 : $previous;
 
-		// Calculate new start value for "next" link
-		$next = (($start + $limit) <= $totalItems) ? ($start + $limit) : null;
-		if ($next >= 100) { $next = null; }
-
-		// Display previous and next links if applicable
-		if (!is_null($previous) || !is_null($next)) {
+// Calculate new start value for "next" link
+$next = (($start + $limit) <= $totalItems) ? ($start + $limit) : null;
+if ($next >= 100) { $next = null; }
+  // Display previous and next links if applicable
+  if (!is_null($previous) || !is_null($next)) {
 ?>
-
-		<nav role="navigation" aria-label="pagination">
-		<ul class="pages">
+    <nav role="navigation" aria-label="pagination">
+      <ul class="pages">
 <?php
-			if (!is_null($previous)) {
+if (!is_null($previous)) {
 ?>
-			<li><a class="previous" rel="prev" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $previous; ?>">Previous</a></li>
-
+        <li><a class="previous" rel="prev" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $previous; ?>">Previous</a></li>
 <?php
-			}
-			if (!is_null($next)) {
+}
+if (!is_null($next)) {
 ?>
-			<li><a class="next" rel="next" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $next; ?>">Next</a></li>
+        <li><a class="next" rel="next" href="./index.html?q=<?php echo urlencode($_GET['q']);?><?php if (!is_null($facet)) echo '&amp;facet=' . $facet;?>&amp;totalItems=<?php echo $totalItems; ?>&amp;start=<?php echo $next; ?>">Next</a></li>
 <?php
-			}
+}
 ?>
-		</ul>
-		</nav>
+      </ul>
+    </nav>
 <?php
-			}
-		} // End else -- $totalItems <= 0
-        } // End (!is_null($q))
+    }
+  } // End else -- $totalItems <= 0
+} // End (!is_null($q))
 ?>
-	</div>
-	<div class="flex-facet" role="complementary">
-		<h1>Facets</h1>
-		<p>Not seeing what you need? Watch the space below for refinements.
+    </div>
+    <div class="flex-facet" role="complementary">
+      <h1>Facets</h1>
+      <p>Not seeing what you need? Watch the space below for refinements.
 <?php
 if (!is_null($q)) {
 // Process query
@@ -183,142 +180,141 @@ $cueWords = array( "about", "above", "across", "after", "afterwards", "again", "
 $qToken = strtok($q, "+");
 if (in_array(strtolower($qToken), $cueWords)) {
 ?>
-                <details open>
-                <summary>It looks like you are asking a question.</summary>
-                        <p>Do you want to <a href="http://ask.lib.montana.edu/ask">talk to a librarian</a>?</p>
-                </details>
-                <details>
-                <summary>Research Help</summary>
-                        <p>Are you wanting to chat about research? See our <a href="http://www.lib.montana.edu/services/liaisons-by-department.html">research liasions</a> or <a href="http://www.lib.montana.edu/people/expertise.php">people by subject expertise</a>.</p>
-                </details>
-                <details>
-                <summary>FAQ</summary>
-                        <p>It looks like you have a question. We have a list of common library questions in <a href="http://ask.lib.montana.edu/">our FAQ</a> or we can <a href="http://ask.lib.montana.edu/search/?q=<?php echo $q; ?>">run your search in our knowledgebase</a>.</p>
-		</details>
+      <details open>
+      <summary>It looks like you are asking a question.</summary>
+        <p>Do you want to <a href="http://ask.lib.montana.edu/ask">talk to a librarian</a>?</p>
+      </details>
+      <details>
+      <summary>Research Help</summary>
+        <p>Are you wanting to chat about research? See our <a href="http://www.lib.montana.edu/services/liaisons-by-department.html">research liasions</a> or <a href="http://www.lib.montana.edu/people/expertise.php">people by subject expertise</a>.</p>
+      </details>
+      <details>
+      <summary>FAQ</summary>
+        <p>It looks like you have a question. We have a list of common library questions in <a href="http://ask.lib.montana.edu/">our FAQ</a> or we can <a href="http://ask.lib.montana.edu/search/?q=<?php echo $q; ?>">run your search in our knowledgebase</a>.</p>
+      </details>
 <?php
 }//end check for natural language question words
 
 // Set URL for the Google Custom Search API call
 $url = "https://www.googleapis.com/customsearch/$v?key=$key&cx=$id&alt=$form".(is_null($sort) ? "" : "&sort=$sort")."&num=$limit&start=$start&prettyprint=true&q=$q".(is_null($facet) ? "" : "&hq=$facet");
 
-        // View source to see raw API call - REMOVE from production code
-        echo '<!--' . $url . '-->';
+// View source to see raw API call - REMOVE from production code
+echo '<!--' . $url . '-->';
 
-        // Build request and send to Google Ajax Search API
-        $request = file_get_contents($url);
+// Build request and send to Google Ajax Search API
+$request = file_get_contents($url);
 
-        if ($request === FALSE) {
-                // API call failed, display message to user
-                echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
-                exit();
-        }
+if ($request === FALSE) {
+// API call failed, display message to user
+    echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
+  exit();
+}
 
-        // Decode json object(s) out of response from Google Ajax Search API
-        $getFacets = json_decode($request, true);
+// Decode json object(s) out of response from Google Ajax Search API
+$getFacets = json_decode($request, true);
 
-        // Get values in json data for number of search results returned
-        $totalItems = isset($_GET['totalItems']) ?  strip_tags((int)$_GET['totalItems']) : $result['queries']['request'][0]['totalResults'];
+// Get values in json data for number of search results returned
+$totalItems = isset($_GET['totalItems']) ?  strip_tags((int)$_GET['totalItems']) : $result['queries']['request'][0]['totalResults'];
 
-	if ($totalItems > 30) { 
+if ($totalItems > 30) { 
 ?>
-		<details>
-		<summary>"Hand-picked" Topics</summary>
-		<p>A few common topics based on our <a href="http://www.lib.montana.edu/sitemap.html">human-created sitemap</a> and an analysis of our search logs.</p>
-		<p class="terms"><a href="index.html?q=articles+research+databases">articles & research databases</a> <a href="index.html?q=borrow">borrow</a> <a href="index.html?q=research+help">research help</a> <a href="index.html?q=library+hours">library hours</a> <a href="index.html?q=yellowstone">yellowstone</a> <a href="index.html?q=parking+directions">parking &amp; directions</a> <a href="index.html?q=montana+history">montana history</a> <a href="index.html?q=google+scholar+msu">google scholar msu</a> <a href="index.html?q=montana+code+annotated">montana code annotated</a> <a href="index.html?q=mla+format">mla format 6th edition</a></p>
-                </details>
-		<details>
-                <summary>Topics by Location</summary>
-                        <p id="message" style="display:none"><img alt="loading" src="./meta/img/loading.gif" id="loading" /> Waiting for Godot...</p>
-                        <p id="terms" class="terms"> </p>
-        <script id="worker" type="text/javascript">
+      <details>
+      <summary>"Hand-picked" Topics</summary>
+        <p>A few common topics based on our <a href="http://www.lib.montana.edu/sitemap.html">human-created sitemap</a> and an analysis of our search logs.</p>
+        <p class="terms"><a href="index.html?q=articles+research+databases">articles & research databases</a> <a href="index.html?q=borrow">borrow</a> <a href="index.html?q=research+help">research help</a> <a href="index.html?q=library+hours">library hours</a> <a href="index.html?q=yellowstone">yellowstone</a> <a href="index.html?q=parking+directions">parking &amp; directions</a> <a href="index.html?q=montana+history">montana history</a> <a href="index.html?q=google+scholar+msu">google scholar msu</a> <a href="index.html?q=montana+code+annotated">montana code annotated</a> <a href="index.html?q=mla+format">mla format 6th edition</a></p>
+      </details>
+      <details>
+      <summary>Topics by Location</summary>
+        <p id="message" style="display:none"><img alt="loading" src="./meta/img/loading.gif" id="loading" /> Waiting for Godot...</p>
+        <p id="terms" class="terms"> </p>
+      <script id="worker" type="text/javascript">
         var msg = document.getElementById("message");
         if (navigator.geolocation) {
-                //show loading message
-                msg.style.display = 'block';
-                navigator.geolocation.getCurrentPosition(addScript);
-                console.log('geolocation done');
+          //show loading message
+          msg.style.display = 'block';
+          navigator.geolocation.getCurrentPosition(addScript);
+          console.log('geolocation done');
         } else {
-                //error with geolocation
-                alert('Error: Your browser doesn\'t support geolocation.');
+          //error with geolocation
+          alert('Error: Your browser doesn\'t support geolocation.');
         }
 
         function addScript(position) {
-                //set latitude and longitude values
-                var lat = parseFloat(position.coords.latitude);
-                var lon = parseFloat(position.coords.longitude);
-                var jsonp = document.createElement('script');
-                jsonp.type = 'text/javascript';
-                jsonp.async = true;
-                jsonp.src = "https://experimental.worldcat.org/mapfast/services?geo=" + lat + "," + lon + ";crs=wgs84&radius=100000&mq=&sortby=distance&max-results=15&callback=showSubjects";
-                //document.querySelector('.terms').appendChild(script);
-                var script = document.getElementsByTagName('script')[0];
-                script.parentNode.insertBefore(jsonp, script);        
+          //set latitude and longitude values
+          var lat = parseFloat(position.coords.latitude);
+          var lon = parseFloat(position.coords.longitude);
+          var jsonp = document.createElement('script');
+          jsonp.type = 'text/javascript';
+          jsonp.async = true;
+          jsonp.src = "https://experimental.worldcat.org/mapfast/services?geo=" + lat + "," + lon + ";crs=wgs84&radius=100000&mq=&sortby=distance&max-results=15&callback=showSubjects";
+          //document.querySelector('.terms').appendChild(script);
+          var script = document.getElementsByTagName('script')[0];
+          script.parentNode.insertBefore(jsonp, script);        
         }
 
         function showSubjects(data) {
-                //hide loading message
-                msg.style.display = 'none';
-                var container = document.getElementById("terms");
-                var markup = '<span>';
-                //var url = "http://www.worldcat.org/search?q=su:" + term + "&qt=advanced";
-                var url = "./index.html?&q=";
-                var i = -1;
-                var length = data.Placemark.length;
-                while (++i < length) {          
-                //for (var i = 0; i < length; i++) {
-                        var cleanTerm = data.Placemark[i].name.replace(/ -- /g, " ");
-                        markup += '<a title="' + data.Placemark[i].name + '" href="' + url + cleanTerm + '">' + data.Placemark[i].name + '</a>';
-                }       
-                container.innerHTML = markup + '</span> ';
+          //hide loading message
+          msg.style.display = 'none';
+          var container = document.getElementById("terms");
+          var markup = '<span>';
+          //var url = "http://www.worldcat.org/search?q=su:" + term + "&qt=advanced";
+          var url = "./index.html?&q=";
+          var i = -1;
+          var length = data.Placemark.length;
+            while (++i < length) {          
+            //for (var i = 0; i < length; i++) {
+              var cleanTerm = data.Placemark[i].name.replace(/ -- /g, " ");
+              markup += '<a title="' + data.Placemark[i].name + '" href="' + url + cleanTerm + '">' + data.Placemark[i].name + '</a>';
+            }       
+            container.innerHTML = markup + '</span> ';
         }               
-        </script>
-                </details>
-                <details>
-                <summary>Popular</summary>
-			<p>Here are a few of the most popular searches from our search logs. They might help.</p>
-			<p class="terms">  
+      </script>
+      </details>
+      <details>
+      <summary>Popular</summary>
+        <p>Here are a few of the most popular searches from our search logs. They might help.</p>
+        <p class="terms">  
 <?php
-                        // Set most popular search terms RDF URL
-                        $request = 'http://www.google.com/cse/api/010001021870615082419/cse/sgtwcccfbiq/queries?key='.$key.'&view=overall';
-                        // Read feed into SimpleXML object
-                        $getPopular = simplexml_load_file($request, 'SimpleXMLIterator');
-                        // Set limit of 5 terms to display
-                        $entries = new LimitIterator($getPopular->item, 0, 5);
-                        foreach ($entries as $entry) {
-                                $popularTerm = htmlentities($entry->title);
+// Set most popular search terms RDF URL
+$request = 'http://www.google.com/cse/api/010001021870615082419/cse/sgtwcccfbiq/queries?key='.$key.'&view=overall';
+// Read feed into SimpleXML object
+$getPopular = simplexml_load_file($request, 'SimpleXMLIterator');
+// Set limit of 5 terms to display
+$entries = new LimitIterator($getPopular->item, 0, 5);
+foreach ($entries as $entry) {
+  $popularTerm = htmlentities($entry->title);
 ?>
-                        <a href="./index.html?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a>
+        <a href="./index.html?view=search&q=<?php echo urlencode($popularTerm); ?>"><?php echo urldecode($popularTerm); ?></a>
 <?php
-                        }
+}
 ?>
-			</p>
-		</details>
+        </p>
+      </details>
 <?php
 } //end conditional checking for large result sets - anything over 25 results triggers these suggestions
 
-        if ($totalItems <= 0) { 
-        // Empty results, display message to user
+if ($totalItems <= 0) { 
+// Empty results, display message to user
 ?>
-	<p><strong>Oops! There were no results.</strong> &#9785;</p>
+      <p><strong>Oops! There were no results.</strong> &#9785;</p>
 <?php        
-	} else {
-                // Make sure some results were returned, show results as html with result numbering and pagination
+} else {
+// Make sure some results were returned, show results as html with result numbering and pagination
 ?>
-                <details>
-                <summary>Categories</summary>
-                <p class="terms">
-                <a href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">All</a>
+      <details>
+      <summary>Categories</summary>
+        <p class="terms">
+        <a href="./index.html?q=<?php echo urlencode($_GET['q']); ?>">All</a>
 <?php
-
-                foreach ($getFacets['context']['facets'] as $key) {
-                        echo " <a href=\"./index.html?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a> ";
-                }
+foreach ($getFacets['context']['facets'] as $key) {
+        echo " <a href=\"./index.html?q=" . urlencode($_GET['q']). "&amp;facet={$key[0]['label']}\">" . ucfirst($key[0]['anchor']) . "</a> ";
+}
 ?>
-                </p>
-                </details>
-                <details id="offer">
-                <summary>Offers</summary>
-		<p>Offers based on current date and local weather.</p>
+        </p>
+      </details>
+      <details id="offer">
+      <summary>Offers</summary>
+        <p>Offers based on current date and local weather.</p>
 <?php
 //show research offer by comparing current year-month-day to fall/spring year-month-day range
 $year = date("Y");
@@ -330,15 +326,15 @@ $researchOfferSpringEnd = strtotime("$year-05-18");
 
 if ($today > $researchOfferFallBegin && $today < $researchOfferFallEnd) {
 ?>
-		<p>It is that time of the year. The days are shorter and research papers are happening. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a>.</p>
+        <p>It is that time of the year. The days are shorter and research papers are happening. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a>.</p>
 <?php
 } elseif ($today > $researchOfferSpringBegin && $today < $researchOfferSpringEnd) {
 ?>
-		<p>It is that time of the year. Spring fever is almost here, but you have a research paper to write. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a>.</p>
+        <p>It is that time of the year. Spring fever is almost here, but you have a research paper to write. Get started by <a href="http://ask.lib.montana.edu/ask">talking to a Librarian</a>.</p>
 <?php
 } else {
 ?>
-		<p>The semester is just getting started. You still have some time to read. <a href="https://www.lib.montana.edu/locations/first.html">Check out our browse collection</a>.</p>
+        <p>The semester is just getting started. You still have some time to read. <a href="https://www.lib.montana.edu/locations/first.html">Check out our browse collection</a>.</p>
 <?php
 } //end research offer based on date conditional
 
@@ -358,9 +354,9 @@ $apiURL = 'https://api.forecast.io/forecast/'.$forecastKey.'/'.$lat.','.$lng.'?e
 $request = file_get_contents($apiURL);
 
 if ($request === FALSE) {
-        //API call failed, display message to user
-        echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
-        exit();
+  //API call failed, display message to user
+      echo '<p><strong>It looks like we can\'t communicate with the API at the moment.</strong></p>'."\n";
+  exit();
 }
 
 //create json object(s) out of response from API; set to "true" to turn response into an array
@@ -380,27 +376,27 @@ $pressure = $result->currently->pressure;
 $precipProbability = $result->currently->precipProbability;
 $cloudCover = $result->currently->cloudCover;
 ?>
-        <!--<p><figure><canvas id="<?php //echo $icon; ?>" width="64" height="64"></canvas></figure></p>-->
+      <!--<p><figure><canvas id="<?php //echo $icon; ?>" width="64" height="64"></canvas></figure></p>-->
 <?php
-	if ($cloudCover > .3) {
+if ($cloudCover > .3) {
 ?>
-	<p>It's cloudy and cold, stop in for a cup of something warm. Check out the <a href="http://www.montana.edu/ufs/menus/brewed_awakening.php">"Brewed Awakening" hours and menu</a>.</p>
-	</details>
+        <p>It's cloudy and cold, stop in for a cup of something warm. Check out the <a href="http://www.montana.edu/ufs/menus/brewed_awakening.php">"Brewed Awakening" hours and menu</a>.</p>
+      </details>
 <?php
-	} else {
+} else {
 ?>
-	<p>Here comes the sun, stop in for a cup of something cool. Check out the <a href="http://www.montana.edu/ufs/menus/brewed_awakening.php">"Brewed Awakening" hours and menu</a>.</p>
-	</details>
+        <p>Here comes the sun, stop in for a cup of something cool. Check out the <a href="http://www.montana.edu/ufs/menus/brewed_awakening.php">"Brewed Awakening" hours and menu</a>.</p>
+      </details>
 <?php
-	} // end suggestion based on weather
-	} else {
+} // end suggestion based on weather
+} else {
 ?>
-	<p class="subHeading">No forecast.io results for <strong><?php urldecode($q); ?></strong>.</p>
-	<p class="control"><a href="<?php echo htmlentities(strip_tags(basename(__FILE__))); ?>" class="refresh">Reset the page</a></p>
-	</details>
+        <p class="subHeading">No forecast.io results for <strong><?php urldecode($q); ?></strong>.</p>
+        <p class="control"><a href="<?php echo htmlentities(strip_tags(basename(__FILE__))); ?>" class="refresh">Reset the page</a></p>
+      </details>
 <?php
-	} //end weather conditional
-	} //end conditional checking for any result sets - these are the default facets
+    } //end weather conditional
+  } //end conditional checking for any result sets - these are the default facets
 } //end (!is_null($q))
 ?>
     <p>With this prototype, I'm looking at ways that the search act can be treated as a conversation.</p>

@@ -1,6 +1,6 @@
 # search-ux
 Search Application for "Improving Search UX using Query Analysis and Machine Cues"
-- Prototype for Digital Library Forum 2015 presentation: "Is there a Ghost in the [Search] Machine? Improving Search UX using Query Analysis and Machine Cues". [Slides] for context are available.
+- Prototype for Digital Library Forum 2015 and Access 2016 session(s): "Is there a Ghost in the [Search] Machine? Improving Search UX using Query Analysis and Machine Cues". [Slides] for context are available.
 
 ### Creator[s]
 - Jason A. Clark web: [jason clark] twitter: [@jaclark]
@@ -11,6 +11,7 @@ Search Application for "Improving Search UX using Query Analysis and Machine Cue
 ### Tech
 - Javascript
 - PHP
+- Python
 - HTML
 - CSS
 

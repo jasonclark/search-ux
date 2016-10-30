@@ -1,3 +1,4 @@
+@charset "UTF-8";
 html {box-sizing:border-box;font-family:'Open sans',sans-serif;font-size:100%;line-height:1.7rem;}
 *, *:before, *:after {box-sizing:inherit;}
 body {color:#333;margin:0;padding:0;}

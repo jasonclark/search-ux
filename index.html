@@ -415,17 +415,17 @@ if ($cloudCover > .3) {
 <script>
 //watches scroll position in window and shows progress using left to right animated bar
 //dependent on <div class="progress"> and .progress inline CSS class
-  var h = document.documentElement;
-  var b = document.body;
-  var st = "scrollTop";
-  var sh = "scrollHeight";
-  var progress = document.querySelector(".progress");
-  var scroll;
-  document.addEventListener("scroll", function () {
-    "use strict";
-    scroll = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
-    progress.style.setProperty("--scroll", scroll + "%");
-  });
+var h = document.documentElement;
+var b = document.body;
+var st = "scrollTop";
+var sh = "scrollHeight";
+var progress = document.querySelector(".progress");
+var scroll;
+document.addEventListener("scroll", function () {
+  "use strict";
+  scroll = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
+  progress.style.setProperty("--scroll", scroll + "%");
+});
 </script>
 </body>
 </html>

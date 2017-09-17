@@ -21,6 +21,7 @@ input {border-radius:4px;outline:none;}
 :focus::-moz-placeholder {color:transparent;}
 :focus:-ms-input-placeholder {color:transparent;}
 .search {background:#eff1f3;border:1px solid #d8d8d8;padding:8px 15px;width:70%;}
+.search:focus {border:1px solid #207cca;}
 .button {background-color:#207cca;border:1px solid #207cca;color:#fafafa;/*left:-8px;*/padding:8px 15px;/*position:relative;*/}
 .button:hover {background-color:#fafafa;color:#207cca;}
 .info {display:flex;flex-direction:column;align-items:flex-end;}
